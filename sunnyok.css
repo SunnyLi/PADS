@@ -1,0 +1,88 @@
+/*PADS: Basic layout*/
+
+#wrap {
+width: 920px;
+margin: 0 auto;
+text-align: left;
+}
+
+#tLayer{
+width: 920px;
+height: 100%;
+background-color: #000;
+position: fixed;
+top: 0px;
+z-index: -1;
+opacity: 0.3;
+/*for IE*/
+filter: alpha (opacity = 30);
+}
+
+#top{
+position: absolute;
+top: 0px;
+left: 0px;
+height: 30px;
+width: 100%;
+background-color: lightgreen;
+z-index: 11;
+}
+
+#top-bar{
+position: absolute;
+top: 0px;
+height: 30px;
+width: 920px;
+z-index: 12;
+/*border: 1px solid red;*/
+}
+
+#title{
+float: left;
+padding: 5px 10px;
+}
+/*WTF Facepalm glitch...*/
+#search{
+float: left;
+}
+#search, #sf{
+padding: 4px;
+height: 10px;
+}
+#sb{
+height: 22px;
+margin: 0 0;
+}
+#user{
+float: right;
+padding: 5px 10px;
+}
+
+#cwrap{
+position: absolute;
+top: 30px;
+width: 920px;
+}
+
+#head{
+height: 180px;
+}
+
+#head img{
+height: 150px;
+width: 100%;
+}
+
+#bar{
+position: absolute;
+top: 138px;
+padding: 5px;
+opacity: 0.8;
+background-color: yellow;
+}
+
+.item{
+padding: 0 10px;
+}
+
+a{text-decoration: none;}
