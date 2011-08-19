@@ -9,32 +9,47 @@
 <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
 <title>PADS Pre-Alpha</title>
 
-<meta name = "author" content = "Sunnyok"/> 
-<meta name = "keyword" content = "Sunnyok, anime, MAD, vocaloid, video, danmaku, NND, MMD, random site"/> 
-<meta name = "description" content = "Another Danmaku Video Site for AMV, MAD, Vocaloid Music lovers."/> 
-<link rel = "stylesheet" type = "text/css" href = "sunnyok.css"/> 
+<meta name="author" content="Sunnyok"/> 
+<meta name="keyword" content="Sunnyok, anime, MAD, vocaloid, video, danmaku, NND, MMD, random site"/> 
+<meta name="description" content="A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers."/> 
+<link rel="stylesheet" type="text/css" href="sunnyok.css"/> 
 
 <!--Scripts-->
+
+<script type="text/javascript">
+function showSearchBox(){
+	document.getElementById('search-box').innerHTML = ': <input type="text" id="sf"/> <input type="button" id="sb" value="GO"/>';
+}
+function cls(id){
+document.getElementById(id).innerHTML = '';
+}
+</script>
 
 </head>
 
 <body>
-<div id="top"></div>
-<div id="wrap"><!--<div id="tLayer"></div>-->
+<div id="top-bar"></div>
+<div id="wrap">
 
-<div id="cwrap">
+<!-- Highlight problem-->
+<div id="top-content">
+<span id="name"><a href="http://localhost/PADS">PADS</a></span>
+<span id="search" onmouseover="showSearchBox()"><a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/PADS/search">Search</a></span>
+<span id="search-box" onselect="showSearchBox()"></span>
+<span id="user"><?php if (!empty($uid)){echo '<a href="http://localhost/PADS/?u='.$uid.'">'.$name.'</a>';}else{echo '<a href = "http://localhost/PADS/Login">Sign in</a>';};?></span>
+</div>
+
+<div id="cwrap" onclick="cls('search-box')">
 
 <div id="head">
-<img src="logo.png"/>
+<a href="."><img id="logo" class="full"/></a>
 
 <div id="bar">
-<span class="item"><a href="http://localhost/PADS/AMV">AMV</a></span>|
-<span class="item">MAD</span>|
-<span class="item">Vocaloid</span>|
-<span class="item">Game</span>|
-<span class="item">Other</span>
+<span class="cat"><a href="http://localhost/PADS/AMV">AMV</a></span>|
+<span class="cat">MAD</span>|
+<span class="cat">Vocaloid</span>|
+<span class="cat">Game</span>|
+<span class="cat">Other</span>
 </div>
 
 </div>
-
-<div id="content">

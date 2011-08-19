@@ -1,7 +1,9 @@
-<?php session_start();
+<?php require_once('connect.php');
+
+session_start();
 
 //$_SESSION['uid'] = 1;
-$_SESSION['name'] = 'Sunny';
+//$_SESSION['name'] = 'Sunny';
 //session_unset('name');
 //session_unset('uid');
 
@@ -13,49 +15,19 @@ $uid = null;
 $name = null;
 };
 
+db_connect('videos');
+$contents = @mysql_query("SELECT * FROM `vid` ORDER BY `upload time` DESC LIMIT 10");
+
 require_once('header.html');
+
+while($content = mysql_fetch_row($contents)){
+echo '<div class="content" style="background-color: rgb('.rand(150,256).','.rand(150,256).','.rand(150,256).');">
+<span class="ctitle">'.$content[1].'</span><br />
+<span class="info">'. date('Y-m-d H:m:s' ,$content[4]) .'@'.$content[3].'</span><br />
+<span class="desc">'.$content[2].'</span>
+</div>
+';
+}
+
+include_once('footer.html');
 ?>
-
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-Stuff here!<br />
-</div>
-
-<div id="footer">
-
-<table width="940" cellspacing="0" cellpadding="0" border="0" align="center">
-<tbody>
-<tr>
-<td align="center">
-Notice: NO video files are stored on this server!<br />
-Error Reporting: namedoesntfi#hotmail.com (Change # to @ )<br />
-Copyright
-<a href="http://sunny.hifast.ca/">Sunnyok</a>
-Some Rights Reserved
-</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-
-</div>
-
-<div id="top-bar">
-<span id="title"><a href="http://localhost/PADS">PADS</a></span>
-<span id="search"><a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/PADS/search">Search</a>: <input type="text" id="sf"/> <input type="button" id="sb" value="GO"/></span>
-<span id="user"><?php if (!empty($uid)){echo '<a href="http://localhost/PADS/?u='.$uid.'">'.$name.'</a>';}else{echo '<a href = "http://localhost/PADS/Login">Sign in</a>';};?></span>
-</div>
-
-</div>
-
-</body>
-
-</html>
