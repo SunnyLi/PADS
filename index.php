@@ -1,4 +1,4 @@
-<?php require_once('connect.php');
+<?php require_once('sqldb/connect.php');
 
 session_start();
 
@@ -15,12 +15,12 @@ $uid = null;
 $name = null;
 };
 
-db_connect('videos');
-$contents = @mysql_query("SELECT * FROM `vid` ORDER BY `upload time` DESC LIMIT 10");
+db_connect('data');
+$contents = @mysql_query("SELECT * FROM `video` WHERE `type`=`vid` ORDER BY `upload time` DESC LIMIT 10");
 
 require_once('header.html');
 
-while($content = mysql_fetch_row($contents)){
+while(@$content = mysql_fetch_row($contents)){
 echo '<div class="content" style="background-color: rgb('.rand(150,256).','.rand(150,256).','.rand(150,256).');">
 <span class="ctitle">'.$content[1].'</span><br />
 <span class="info">'. date('Y-m-d H:m:s' ,$content[4]) .'@'.$content[3].'</span><br />

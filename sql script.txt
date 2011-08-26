@@ -1,0 +1,85 @@
+CREATE DATABASE  `ppl` ;
+
+#USER
+CREATE TABLE `ppl`.`user` (
+`uid` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`user` VARCHAR(30) NOT NULL,
+`pass` VARCHAR(40) NOT NULL,
+`salt` VARCHAR(8) NOT NULL,
+`name` VARCHAR(30) NOT NULL,
+`bday` DATE,
+`about` TEXT,
+`share` VARCHAR(255),
+`perm` TINYINT UNSIGNED
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+
+CREATE DATABASE  `data` ;
+
+#MEDIA HANDLER
+CREATE TABLE  `data`.`handler` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`uid` MEDIUMINT UNSIGNED NOT NULL ,
+`title` VARCHAR( 100 ) NOT NULL ,
+`media` VARCHAR( 3 ) NOT NULL ,
+`time` TIMESTAMP NOT NULL ,
+`points` SMALLINT UNSIGNED NOT NULL DEFAULT '0',
+`category` VARCHAR( 50 ) NOT NULL ,
+`tags` VARCHAR( 50 ) ,
+`special` VARCHAR (50)
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+
+#VIDEO
+CREATE TABLE  `data`.`video` (
+`vid` INT UNSIGNED NOT NULL ,
+`desc` VARCHAR( 500 ) ,
+`type` VARCHAR( 2 ) NOT NULL ,
+`code` VARCHAR( 10 ) NOT NULL ,
+PRIMARY KEY (  `vid` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+
+#TEXTS
+CREATE TABLE  `data`.`text` (
+`tid` INT UNSIGNED NOT NULL ,
+`text` TEXT NOT NULL ,
+PRIMARY KEY (  `tid` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+
+#COMMENTS
+CREATE TABLE  `data`.`comments` (
+`pid` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id` INT UNSIGNED NOT NULL ,
+`comment` VARCHAR( 255 ) NOT NULL ,
+`time` TIMESTAMP NOT NULL ,
+`uid` MEDIUMINT UNSIGNED NOT NULL ,
+INDEX (  `id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+
+CREATE DATABASE  `danmaku` ;
+
+#DANMAKKU
+CREATE TABLE  `danmaku`.`cmt#` (
+`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`stime` FLOAT NOT NULL ,
+`mode` TINYINT UNSIGNED NOT NULL ,
+`size` TINYINT UNSIGNED NOT NULL ,
+`color` MEDIUMINT UNSIGNED NOT NULL ,
+`date` TIMESTAMP NOT NULL ,
+`message` VARCHAR( 999 ) NOT NULL ,
+`uid` MEDIUMINT UNSIGNED
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+
+
+
+
+#COMMANDS
+#mysql_query("INSERT INTO `HANDLER` (`uid`, `title`, `media`, `category`, `tags`) VALUES ('123','test','vid','rand',null)");
+
+/*$exe = mysql_query("SELECT MAX(id) FROM `handler`");
+$high = mysql_fetch_array($exe);
+echo $high[0];*/
