@@ -18,7 +18,7 @@ $name = null;
 db_connect('data');
 $contents = @mysql_query("SELECT * FROM `video` WHERE `type`=`vid` ORDER BY `upload time` DESC LIMIT 10");
 
-require_once('header.html');
+require_once('header.php');
 
 while(@$content = mysql_fetch_row($contents)){
 echo '<div class="content" style="background-color: rgb('.rand(150,256).','.rand(150,256).','.rand(150,256).');">
@@ -29,5 +29,5 @@ echo '<div class="content" style="background-color: rgb('.rand(150,256).','.rand
 ';
 }
 
-include_once('footer.html');
+include_once('footer.php');
 ?>

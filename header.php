@@ -7,14 +7,9 @@
 
 <head>
 <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
-<title>PADS Pre-Alpha</title>
-
-<meta name="author" content="Sunnyok"/> 
-<meta name="keyword" content="Sunnyok, anime, MAD, vocaloid, video, danmaku, NND, MMD, random site"/> 
-<meta name="description" content="A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers."/> 
+<title><?php echo isset($title) ? $title.'|Sunnyok' : 'PADS Pre-Alpha' ?></title>
+<meta name="description" content="<?php echo isset($desc) ? $desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
 <link rel="stylesheet" type="text/css" href="../../PADS/sunnyok.css"/> 
-
-<!--Scripts-->
 
 <script type="text/javascript">
 function showSearchBox(){
@@ -36,16 +31,16 @@ document.getElementById(id).innerHTML = '';
 <span id="name"><a href="http://localhost/PADS">PADS</a></span>
 <span id="search" onmouseover="showSearchBox()"><a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/PADS/search">Search</a></span>
 <span id="search-box" onselect="showSearchBox()"></span>
-<span id="user"><?php if (!empty($uid)){echo '<a href="http://localhost/PADS/?u='.$uid.'">'.$name.'</a>';}else{echo '<a href = "http://localhost/PADS/Login">Sign in</a>';};?></span>
+<span id="user"><?php if (!empty($uid)){echo '<a href="http://localhost/PADS/?u='.$uid.'">'.@$name.'</a>';}else{echo '<a href = "http://localhost/PADS/Login">Sign in</a>';};?></span>
 </div>
 
 <div id="cwrap" onclick="cls('search-box')">
 
 <div id="head">
-<a href="."><img id="logo" class="full"/></a>
+<a href="http://localhost/pads"><img id="logo" class="full"/></a>
 
 <div id="bar">
-<span class="cat"><a href="http://localhost/PADS/AMV">AMV</a></span>|
+<span class="cat"><a href="http://localhost/pads/acg/?acg=">AMV</a></span>|
 <span class="cat">MAD</span>|
 <span class="cat">Vocaloid</span>|
 <span class="cat">Game</span>|

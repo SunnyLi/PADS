@@ -1,5 +1,7 @@
 /*PADS: Basic layout*/
 
+body, h1, h2, h3, h4, h5, h6 {padding: 0; margin: 0;}
+
 a{text-decoration: none;}
 
 #wrap {
@@ -38,7 +40,7 @@ padding: 0 10px;
 #search {
 padding: 0;
 }
-#search-box input[type="text"]{height: 16px; margin: 0; padding: 0;}
+#search-box input[type="text"]{margin: 0; padding: 0;}
 #search-box input[type="button"]{height: 22px;}
 #user{
 float: right;
@@ -56,19 +58,21 @@ height: 200px;
 
 #head #logo{
 background-image: url(logo.png);
-background-size: 1000px 150px;
+background-size: 1000px 170px;
 }
 
 #head .full{
-height: 150px;
+height: 170px;
 width: 100%;
 }
 
 #bar{
 position: absolute;
-top: 150px;
+top: 160px;
 padding: 5px;
 background-color: yellow;
+border-top: 1px solid black;
+border-bottom: 1px solid black;
 }
 
 #bar .cat{
