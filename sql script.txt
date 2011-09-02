@@ -3,16 +3,16 @@ CREATE DATABASE  `ppl` ;
 #USER
 CREATE TABLE `ppl`.`user` (
 `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`user` VARCHAR(32) NOT NULL,
+`user` VARCHAR(20) NOT NULL,
 `pass` VARCHAR(64) NOT NULL,
 `salt` VARCHAR(32) NOT NULL,
-`mail` VARCHAR(64) NOT NULL,
-`name` VARCHAR(32),
+`mail` VARCHAR(50) NOT NULL,
+`name` VARCHAR(30),
 `bday` DATE,
 `about` TEXT,
 `share` VARCHAR(255),
 `status` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-`activation_key` VARCHAR(32)
+`activation_key` VARCHAR(16)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 
@@ -24,7 +24,7 @@ CREATE TABLE  `data`.`handler` (
 `uid` INT UNSIGNED NOT NULL,
 `title` VARCHAR(128) NOT NULL,
 `desc` VARCHAR(255),
-`type` VARCHAR(8) NOT NULL,
+`type` VARCHAR(4) NOT NULL,
 `category` VARCHAR(16) NOT NULL,
 `tags` VARCHAR(255),
 `points` MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
@@ -34,10 +34,9 @@ CREATE TABLE  `data`.`handler` (
 #`log` VARCHAR(255)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
-
 #VIDEO
 CREATE TABLE  `data`.`video` (
-`vid` BIGINT UNSIGNED NOT NULL ,
+`id` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1,
 `title` VARCHAR( 64 ) ,
 `desc` VARCHAR( 2048 ) ,
@@ -48,10 +47,9 @@ CREATE TABLE  `data`.`video` (
 PRIMARY KEY (  `vid` )
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
-
 #TEXTS
 CREATE TABLE  `data`.`text` (
-`tid` BIGINT UNSIGNED NOT NULL ,
+`id` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1,
 `title` VARCHAR( 64 ) ,
 `text` TEXT NOT NULL ,
@@ -59,14 +57,23 @@ CREATE TABLE  `data`.`text` (
 PRIMARY KEY (  `tid` )
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
-
-#CODES
+#CODE
 CREATE TABLE `data`.`code` (
-`id` BIGINT UNSIGNED NOT NULL ,
-`file` VARCHAR(255) NOT NULL ,
-PRIMARY KEY (  `id` )
+`id` BIGINT UNSIGNED NOT NULL,
+`part` TINYINT UNSIGNED DEFAULT 1,
+`title` VARCHAR(64),
+`desc` VARCHAR( 255 ) ,
+`code` TEXT NOT NULL,
+`date` TIMESTAMP NOT NULL,
+PRIMARY KEY (`id`)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
+#SCRIPT PAGE
+CREATE TABLE `data`.`page` (
+`id` BIGINT UNSIGNED NOT NULL ,
+`file` VARCHAR(64) NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 #COMMENTS
 CREATE TABLE  `data`.`comments` (
@@ -100,8 +107,6 @@ CREATE TABLE  `danmaku`.`cmt#` (
 #DROP DATABASE ppl
 #DROP DATABASE data
 #DROP DATABASE danmaku
-
-
 
 
 #=============== COMMANDS ===============

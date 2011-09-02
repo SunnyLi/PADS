@@ -3,16 +3,11 @@
 if (!isset($_GET['acg'])) die ('404');
 $acg = $_GET['acg'];
 
-//check query string is a number
-if (is_numeric($acg)){
-//explode the numeric string (if no decimal no second value will return)
+if (is_numeric($acg)){ //this statement enclose all inner function
 $data_array = explode('.', $acg);
-//set data id
 $id = (int)$data_array[0];
-//set part
 isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
-//query
 require_once('../sqldb/connect.php');
 db_connect('data');
 //mysql_set_charset('utf8');
@@ -20,70 +15,104 @@ $query = mysql_query("SELECT * FROM `Handler` WHERE `id`='$id'");
 $handle = mysql_fetch_row($query);
 
 if (!empty($handle)){
-$type = $handle[3];
+$permission  = $handle[8];
 
-switch ($type){ //detect type
+switch ($permission){
+case 2:
+$error[] = 'high permission';
+break;
+
+case 1:
+$type = $handle[4];
+
+switch ($type){
 
 case 'vid':
 $query = mysql_query("SELECT * FROM `video` WHERE `vid`='$id' AND `part`=$part");
-$type = 'video';
-$desc = null;
 break;
 
-case 'txt':
+case 'text':
 $query = mysql_query("SELECT * FROM `txt` WHERE `tid`='$id' AND `part`=$part");
-$type = 'text';
 break;
-
-/* //works but pointless...
-case 'redir':
-exit(header('Location: '.$addr));
-break;
-*/
 
 case 'code':
+break;
+
+
+case 'page':
+//this part won't be used as often so include codes below... check if its included else give error...
 $query = mysql_query("SELECT `file` FROM `code` WHERE `id`=$id");
-$file = '../';
-$file .= 'index.php';
-//$file .= mysql_result($query, 0);
-@require_once($file);
+@$file = mysql_result($query, 0);
+if (!empty($file)){
+
+//query string don't work unless specify full url
+//include_once('http://localhost/pads/pages/'.$file);
+if (@include_once('../pages/'.$file)){
 exit;
+}else{
+//invalid URL
+$error[] = 5;
+}
+
+}else{
+//no file specified
+$error[] = 4;
+}
+break;
+
 
 default:
 //invalid data type... db error
-$error[] = '1';
+$error[] = 1;
+}
+
+//end permission 1 regular
+break;
+
+case 0:
+$error[] = 'pending request';
+break;
+
+default:
+//unknown permission
+$error[] = 6;
 }
 
 }else{
 //id does not exist in database
-$error[] = '2';
+$error[] = 2;
 }
 
-//$uid = $handle[1];
 $title = $handle[2];
-$category = $handle[4];
+if ($permission == 1){ //permission OK
+//$uploader_id = $handle[1];
+isset($handle[3]) ? $desc=$handle[3] : $desc=null ;
+$category = $handle[5]; //category function
+$upload_date = $handle[9];
+}
 
 }else{
 //invalid data entered...
-$error[] = '3';
+$error[] = 3;
 }
 
 
-include_once('../header.php');
+include_once('../inc/header.php');
 
 if(!isset($error)){
 
-switch ($type){
-case 'video':
-echo 'category';
+echo $category;
 echo '<h2>'.$title.'</h2>';
+echo $upload_date.'<br /><br />';
+
+switch ($type){
+case 'vid':
 ?>
 <?php
 break;
 
 case 'text':
 ?>
-132
 <?php
 break;
 
@@ -91,9 +120,15 @@ default:
 //echo $type;
 }
 
+?>
+LOVE: FB G Y!<br />
+Description:
+<?php
+echo $desc;
+
 }else{
 echo 'Error code #'.$error[0];
 };
 
-include_once('../footer.php');
+include_once('../inc/footer.php');
 ?>

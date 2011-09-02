@@ -7,9 +7,9 @@
 
 <head>
 <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
-<title><?php echo isset($title) ? $title.'|Sunnyok' : 'PADS Pre-Alpha' ?></title>
+<title><?php echo isset($title) ? $title.'|PADS' : 'PADS Pre-Alpha' ?></title>
 <meta name="description" content="<?php echo isset($desc) ? $desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
-<link rel="stylesheet" type="text/css" href="../../PADS/sunnyok.css"/> 
+<link rel="stylesheet" type="text/css" href="../../PADS/style/sunnyok.css"/> 
 
 <script type="text/javascript">
 function showSearchBox(){
