@@ -1,6 +1,6 @@
 <div id="footer">
 
-<table width="920" cellspacing="0" cellpadding="0" border="0" align="center">
+<table width="500" cellspacing="0" cellpadding="0" border="0" align="center">
 <tbody>
 <tr>
 <td align="center">

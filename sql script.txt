@@ -103,9 +103,9 @@ CREATE TABLE  `danmaku`.`cmt#` (
 
 
 #==========DROP DATABASE(TESTING PURPOSES)==========
-#DROP DATABASE ppl
-#DROP DATABASE data
-#DROP DATABASE danmaku
+#DROP TABLE IF EXISTS `ppl`;
+#DROP TABLE IF EXISTS `data`;
+#DROP TABLE IF EXISTS `danmaku`;
 
 
 #=============== COMMANDS ===============
