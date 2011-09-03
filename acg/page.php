@@ -1,5 +1,5 @@
 <?php
-$query = mysql_query("SELECT `file` FROM `code` WHERE `id`=$id");
+$query = mysql_query("SELECT `file` FROM `page` WHERE `page`=$id");
 @$file = mysql_result($query, 0);
 
 if (!empty($file)){

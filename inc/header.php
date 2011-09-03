@@ -7,8 +7,8 @@
 
 <head>
 <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
-<title><?php echo isset($title) ? $title.'|PADS' : 'PADS Pre-Alpha' ?></title>
-<meta name="description" content="<?php echo isset($desc) ? $desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
+<title><?php echo isset($html_title) ? $html_title.'|PADS' : 'PADS Pre-Alpha' ?></title>
+<meta name="description" content="<?php echo isset($html_desc) ? $html_desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
 <link rel="stylesheet" type="text/css" href="../../PADS/style/sunnyok.css"/> 
 
 <script type="text/javascript">

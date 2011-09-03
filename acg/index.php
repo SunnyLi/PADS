@@ -11,25 +11,20 @@ if (is_numeric($acg)){
 	db_connect('data');
 	//mysql_set_charset('utf8');
 	$query = mysql_query("SELECT * FROM `Handler` WHERE `id`='$id'");
-	$handle = mysql_fetch_assoc($query);
+	$handle = mysql_fetch_row($query);
 
 
 	if (!empty($handle)){
-		$type = $handle['type'];
+		$type = $handle[4];
 
 		switch ($type){
 		
 			case 'vid':
-			$query = mysql_query("SELECT * FROM `video` WHERE `id`='$id'");
-			$data = @mysql_fetch_assoc($query);
-			if ($data){
-				$provider = $data['type'];
-				$file = $data['code'];
-			}
+			$query = mysql_query("SELECT * FROM `video` WHERE `vid`='$id'");
 			break;
 
 			case 'text':
-			$query = mysql_query("SELECT * FROM `txt` WHERE `tid`='$id' AND `part`=$part");
+			$query = mysql_query("SELECT * FROM `txt` WHERE `txt`='$id' AND `part`=$part"); //txt -> text
 			break;
 
 			case 'code':
@@ -41,32 +36,49 @@ if (is_numeric($acg)){
 			break;
 
 			default:
-			//invalid data type... db error
-			$error[] = 1;
+			$error[] = 'invalid file type';
 			
 		}
 		
-		if($type == 'vid' || $type == 'text' || $type == 'code'){
-
+		while ($data = mysql_fetch_row($query)){
+		/*uses an array to catch parts
+		$current variable allows perfect tracking of parts
+		so part after a nulled part can still work
+		although I already bypassed this issue.*/
+			$current = $data[2];
+			$title[$current] = $data[3];
+			if ($current == $part){
+				if($type == 'vid'){
+					$source[$current] = $data[5];
+					$file[$current] = $data[6];
+					$desc[$current] = $data[4];
+					$up_time[$current] = $data[7];
+				}
+				if($type == 'text'){
+					$text[$current] = $data[4];
+					$up_time[$current] = $data[5];
+				}
+				if($type == 'code'){
+					$source[$current] = $data[5];
+					$desc[$current] = $data[4];
+					$up_time[$current] = $data[6];
+				}
+			}
 		}
-
-		$title = $handle['title'];
+		$parts = count($title);
+		
+		$html_title = $handle[2];
 		//$uploader_id = $handle[1];
-		isset($handle['desc']) ? $desc=$handle['desc'] : $desc=null ;
-		$category = $handle['category']; //category function
-		$upload_date = $handle['date'];
-		$allow = true;
+		$html_desc = $handle[3];
+		$category = $handle[5]; //add category() function
 
 	}else{
-	//id does not exist in database
-	$error[] = 2;
+	$error[] = 'non existant';
 	}
 
 }else{
-//invalid data entered... id not numeric
-$error[] = 3;
+$error[] = 'url error';
 }
-
 
 
 
@@ -77,31 +89,25 @@ if(!isset($error)){
 
 echo $category;
 echo '<h2>'.$title.'</h2>';
-echo $upload_date.'<br /><br />';
+echo $up_time[$part].'<br /><br />';
 
 switch ($type){
 case 'vid':
 ?>
-<embed src="player.swf" height="450" width="950" rel="nofollow" flashvars=<?php
+<embed src="player.swf" height="452" width="950" rel="nofollow" flashvars=<?php
 echo '"id='.$id.'.'.$part;
-switch($provider){
-case 'link';
-break;
-
+switch($source[$part]){
 case 'yt':
 echo '&type=youtube';
 break;
 }
-echo '&file='.$file.'"/>';
+echo '&file='.$file[$part].'"/>';
 break;
 
 case 'text':
 ?>
 <?php
 break;
-
-default:
-//echo $type;
 }
 
 ?>
@@ -111,8 +117,8 @@ Description:
 echo isset($desc) ? $desc : 'not available';
 
 }else{
-echo 'Error ';
-echo isset($error[0]) ? 'code #'.$error[0] : null ;
+echo 'Error';
+echo isset($error[0]) ? ': '.$error[0] : '!' ;
 };
 
 include_once('../inc/footer.php');
