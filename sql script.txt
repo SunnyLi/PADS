@@ -3,16 +3,16 @@ CREATE DATABASE  `ppl` ;
 #USER
 CREATE TABLE `ppl`.`user` (
 `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`user` VARCHAR(20) NOT NULL,
+`user` VARCHAR(32) NOT NULL,
 `pass` VARCHAR(64) NOT NULL,
 `salt` VARCHAR(32) NOT NULL,
-`mail` VARCHAR(50) NOT NULL,
-`name` VARCHAR(30),
+`mail` VARCHAR(64) NOT NULL,
+`name` VARCHAR(64),
 `bday` DATE,
-`about` TEXT,
+`bio` TEXT,
 `share` VARCHAR(255),
-`stats` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-`activation_key` VARCHAR(16)
+`perm` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+`a_key` VARCHAR(16)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 
@@ -25,12 +25,12 @@ CREATE TABLE  `data`.`handler` (
 `title` VARCHAR(128) NOT NULL,
 `desc` VARCHAR(255),
 `type` VARCHAR(4) NOT NULL,
-`category` VARCHAR(16) NOT NULL,
-`tags` VARCHAR(255),
+`cat` VARCHAR(16) NOT NULL,
+`tag` VARCHAR(255),
 `point` MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
-`status` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+`perm` TINYINT UNSIGNED NOT NULL DEFAULT 0,
 `date` TIMESTAMP NOT NULL,
-`thumb` VARCHAR(128),
+`thumb` VARCHAR(255),
 `log` VARCHAR(255)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
@@ -40,9 +40,9 @@ CREATE TABLE  `data`.`video` (
 `vid` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1 ,
 `title` VARCHAR( 64 ) ,
-`desc` VARCHAR( 1024 ) ,
-`source` VARCHAR( 4 ) NOT NULL ,
-`file` VARCHAR( 128 ) NOT NULL ,
+`desc` TEXT ,
+`type` VARCHAR( 4 ) NOT NULL ,
+`file` VARCHAR( 255 ) NOT NULL ,
 `date` TIMESTAMP NOT NULL
 #addon to video such as sound spec thingy
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
@@ -103,9 +103,9 @@ CREATE TABLE  `danmaku`.`cmt#` (
 
 
 #==========DROP DATABASE(TESTING PURPOSES)==========
-#DROP TABLE IF EXISTS `ppl`;
-#DROP TABLE IF EXISTS `data`;
-#DROP TABLE IF EXISTS `danmaku`;
+#DROP DATABASE IF EXISTS `ppl`;
+#DROP DATABASE IF EXISTS `data`;
+#DROP DATABASE IF EXISTS `danmaku`;
 
 
 #=============== COMMANDS ===============

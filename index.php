@@ -15,16 +15,17 @@ $uid = null;
 $name = null;
 };
 
-db_connect('data');
-$contents = @mysql_query("SELECT * FROM `video` WHERE `type`=`vid` ORDER BY `upload time` DESC LIMIT 10");
+@db_connect('data', 'main');
+$contents = @mysql_query("SELECT * FROM `video` WHERE `part`='1' ORDER BY `date` DESC LIMIT 10");
 
 require_once('inc/header.php');
 
-while(@$content = mysql_fetch_row($contents)){
+while($content = mysql_fetch_row($contents)){
 echo '<div class="content" style="background-color: rgb('.rand(150,256).','.rand(150,256).','.rand(150,256).');">
-<span class="ctitle">'.$content[1].'</span><br />
-<span class="info">'. date('Y-m-d H:m:s' ,$content[4]) .'@'.$content[3].'</span><br />
-<span class="desc">'.$content[2].'</span>
+<span class="ctitle">'.$content[3].'</span><br />
+'//<span class="info">'. date('Y-m-d H:m:s' ,$content[7]) .'@'.$content[6].'</span><br />
+.'<span class="info">'. date($content[7]) .'@'.$content[6].'</span><br />
+<span class="desc">'.$content[4].'</span>
 </div>
 ';
 }

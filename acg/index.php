@@ -8,7 +8,7 @@ if (is_numeric($acg)){
 	isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
 	require_once('../sqldb/connect.php');
-	db_connect('data');
+	db_connect('data', 'main');//change user 4 security!!
 	//mysql_set_charset('utf8');
 	$query = mysql_query("SELECT * FROM `Handler` WHERE `id`='$id'");
 	$handle = mysql_fetch_row($query);
@@ -101,7 +101,7 @@ if(!isset($error)){
 
 	switch ($type){
 		case 'vid':
-			?><embed src="player.swf" height="452" width="950" rel="nofollow" flashvars=<?php
+			?><embed id="play" src="player.swf" height="445" width="950" rel="nofollow" flashvars=<?php
 			echo '"id='.$id.'.'.$part;
 			switch($source[$part]){
 				case 'yt':
