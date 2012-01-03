@@ -83,6 +83,11 @@ padding: 0 10px;
 color: lightgray;
 }
 
+#footer{
+clear: both;
+padding-top: 20px;
+}
+
 /*old frontpage*/
 
 .content{

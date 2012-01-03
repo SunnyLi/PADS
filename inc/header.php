@@ -1,7 +1,28 @@
+<?php
+/*========================
+HEADER
+========================*/
+
+//Start session - required to be present on all pages that needs to use session (which is the whole site)
+session_start();
+
+//Checks if have session, Idea: Add session named login
+//Maybe remove this check here altogether..
+if (isset($_SESSION['uid'])&&isset($_SESSION['name'])){
+	$uid = $_SESSION['uid'];
+	$name = $_SESSION['name'];
+}/*else{
+	$uid = null;
+	$name = null;
+}*/;
+
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
  
-<!--Project Another Danmaku Site Front Page by Sunnyok (Alpha Ed.)--> 
+<!--Project Another Danmaku Site Front Page by Sunnyok (Alpha Edition)
+	TODO: Transition to HTML5 --> 
 
 <html xmlns = "http://www.w3.org/1999/xhtml" lang = "en-US" xml:lang = "en-US">
 
@@ -9,7 +30,7 @@
 <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
 <title><?php echo isset($html_title) ? $html_title.'|PADS' : 'PADS Pre-Alpha' ?></title>
 <meta name="description" content="<?php echo isset($html_desc) ? $html_desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
-<link rel="stylesheet" type="text/css" href="../../PADS/style/sunnyok.css"/> 
+<link rel="stylesheet" type="text/css" href="../../PADS/style/sunnyok.css"/> <!-- This has to be absolute url later -->
 
 <script type="text/javascript">
 function showSearchBox(){
@@ -23,10 +44,10 @@ document.getElementById(id).innerHTML = '';
 </head>
 
 <body>
-<div id="top-bar"></div>
+<div id="top-bar"><!--Image only--></div>
 <div id="wrap">
 
-<!-- Highlight problem-->
+<!-- Highlight problem <- What? -->
 <div id="top-content">
 <span id="name"><a href="http://localhost/PADS">PADS</a></span>
 <span id="search" onmouseover="showSearchBox()"><a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/PADS/search">Search</a></span>

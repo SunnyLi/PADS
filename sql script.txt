@@ -1,3 +1,9 @@
+#SUNNY'S DATABASE AUTO-GENERATE SCRIPT
+#Last updated on Jan 3, 2012
+
+
+#=============== INITIALIZE DATABASE ===============
+
 CREATE DATABASE  `ppl` ;
 
 #USER
@@ -10,10 +16,12 @@ CREATE TABLE `ppl`.`user` (
 `name` VARCHAR(64),
 `bday` DATE,
 `bio` TEXT,
-`share` VARCHAR(255),
+`share` VARCHAR(128),
 `perm` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-`a_key` VARCHAR(16)
+`reg_key` VARCHAR(16)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+#SECURITY WARNING: split access data from login info..
 
 
 CREATE DATABASE  `data` ;
@@ -22,8 +30,8 @@ CREATE DATABASE  `data` ;
 CREATE TABLE  `data`.`handler` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `uid` INT UNSIGNED NOT NULL,
-`title` VARCHAR(128) NOT NULL,
-`desc` VARCHAR(255),
+`title` VARCHAR(64) NOT NULL,
+`desc` VARCHAR(128),
 `type` VARCHAR(4) NOT NULL,
 `cat` VARCHAR(16) NOT NULL,
 `tag` VARCHAR(255),
@@ -39,12 +47,11 @@ CREATE TABLE  `data`.`video` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `vid` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1 ,
-`title` VARCHAR( 64 ) ,
+`title` VARCHAR( 128 ) ,
 `desc` TEXT ,
-`type` VARCHAR( 4 ) NOT NULL ,
-`file` VARCHAR( 255 ) NOT NULL ,
+`src` VARCHAR( 16 ) NOT NULL ,
+`url` VARCHAR( 255 ) NOT NULL ,
 `date` TIMESTAMP NOT NULL
-#addon to video such as sound spec thingy
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 #TEXTS
@@ -52,7 +59,7 @@ CREATE TABLE  `data`.`text` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `txt` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1 ,
-`title` VARCHAR( 64 ) ,
+`title` VARCHAR( 128 ) ,
 `text` TEXT NOT NULL ,
 `date` TIMESTAMP NOT NULL
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
@@ -62,9 +69,9 @@ CREATE TABLE `data`.`code` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `code` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1 ,
-`title` VARCHAR(64) ,
+`title` VARCHAR(128) ,
 `desc` VARCHAR( 255 ) ,
-`source` TEXT NOT NULL ,
+`src` TEXT NOT NULL ,
 `date` TIMESTAMP NOT NULL
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
@@ -84,6 +91,8 @@ CREATE TABLE  `data`.`comments` (
 `comment` VARCHAR( 255 ) NOT NULL
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
+#cid = id of source
+
 
 CREATE DATABASE  `danmaku` ;
 
@@ -92,23 +101,23 @@ CREATE TABLE  `danmaku`.`cmt#` (
 `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `stime` FLOAT UNSIGNED NOT NULL ,
 `mode` TINYINT UNSIGNED NOT NULL ,
-`size` TINYINT UNSIGNED NOT NULL ,#char(3)
+`size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
 `color` MEDIUMINT UNSIGNED NOT NULL ,
 `date` TIMESTAMP NOT NULL ,
-`message` VARCHAR( 2048 ) NOT NULL ,
+`message` VARCHAR( 1023 ) NOT NULL , #255?
 `uid` INT UNSIGNED DEFAULT 0
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 
 
-
-#==========DROP DATABASE(TESTING PURPOSES)==========
+#========== DROP DATABASE(TESTING PURPOSES) ==========
 #DROP DATABASE IF EXISTS `ppl`;
 #DROP DATABASE IF EXISTS `data`;
 #DROP DATABASE IF EXISTS `danmaku`;
 
 
-#=============== COMMANDS ===============
+
+#==================== COMMANDS ====================
 
 #insert data general data
 #mysql_query("INSERT INTO `Handler` (`uid`, `title`, `media`, `category`, `tags`) VALUES ('123','test','vid','rand',null)");
