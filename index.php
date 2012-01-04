@@ -11,6 +11,13 @@ Security Note: Do not connect using main account.
 require_once('sqldb/connect.php');
 require_once('inc/header.php');
 
+//Quick Auto DB Initializer
+$initialize = false;
+//$initialize = true;
+if ($initialize){
+	require_once('sqldb/initializer.php');
+}
+
 //Session_start included in header
 //Random setters for testing purposes
 //$_SESSION['uid'] = 1;
