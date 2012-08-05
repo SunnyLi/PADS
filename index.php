@@ -4,17 +4,17 @@ Default Homepage
 ===============================
 Basically connects to the database and produce the default layout
 
-Security Note: Do not connect using main account.
+Security Note: Do not connect using main(root?) account.
 */
 
 //required moduel fo later use
 require_once('sqldb/connect.php');
 require_once('inc/header.php');
 
-//Quick Auto DB Initializer
-$initialize = false;
-//$initialize = true;
-if ($initialize){
+//Auto DB Initializer
+//to initialize database set variable to true
+$init_db = false;
+if ($init_db){
 	require_once('sqldb/initializer.php');
 }
 

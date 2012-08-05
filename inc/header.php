@@ -30,7 +30,7 @@ if (isset($_SESSION['uid'])&&isset($_SESSION['name'])){
 <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
 <title><?php echo isset($html_title) ? $html_title.'|PADS' : 'PADS Pre-Alpha' ?></title>
 <meta name="description" content="<?php echo isset($html_desc) ? $html_desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
-<link rel="stylesheet" type="text/css" href="../../PADS/style/sunnyok.css"/> <!-- This has to be absolute url later -->
+<link rel="stylesheet" type="text/css" href="../../PADS/style/style.css"/> <!-- This has to be absolute url later -->
 
 <script type="text/javascript">
 function showSearchBox(){
@@ -58,7 +58,7 @@ document.getElementById(id).innerHTML = '';
 <div id="cwrap" onclick="cls('search-box')">
 
 <div id="head">
-<a href="http://localhost/pads"><img id="logo" class="full"/></a>
+<a href="http://localhost/pads"><div id="logo" class="full"></div></a>
 
 <div id="bar">
 <span class="cat"><a href="http://localhost/pads/acg/?acg=">AMV</a></span>|
