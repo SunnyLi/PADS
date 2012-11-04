@@ -18,19 +18,17 @@ if (isset($_SESSION['uid'])&&isset($_SESSION['name'])){
 
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<!DOCTYPE html> 
  
-<!--Project Another Danmaku Site Front Page by Sunnyok (Alpha Edition)
-	TODO: Transition to HTML5 --> 
+<!--Project Another Danmaku Site Front Page by Sunnyok (Alpha Edition)--> 
 
-<html xmlns = "http://www.w3.org/1999/xhtml" lang = "en-US" xml:lang = "en-US">
+<html lang="en">
 
 <head>
-<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8"/> 
+<meta charset="utf-8" /> 
 <title><?php echo isset($html_title) ? $html_title.'|PADS' : 'PADS Pre-Alpha' ?></title>
 <meta name="description" content="<?php echo isset($html_desc) ? $html_desc : 'A Danmaku Video Site for AMV, MAD, Vocaloid Music lovers.' ?>"/> 
-<link rel="stylesheet" type="text/css" href="../../PADS/style/style.css"/> <!-- This has to be absolute url later -->
+<link rel="stylesheet" type="text/css" href="/pads/style/style.css"/>
 
 <script type="text/javascript">
 function showSearchBox(){
@@ -49,21 +47,22 @@ document.getElementById(id).innerHTML = '';
 
 <!-- Highlight problem <- What? -->
 <div id="top-content">
-<span id="name"><a href="http://localhost/PADS">PADS</a></span>
+<span id="name"><a href="/pads">PADS</a></span>
 <span id="search" onmouseover="showSearchBox()"><a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/PADS/search">Search</a></span>
 <span id="search-box" onselect="showSearchBox()"></span>
-<span id="user"><?php if (!empty($uid)){echo '<a href="http://localhost/PADS/?u='.$uid.'">'.@$name.'</a>';}else{echo '<a href = "http://localhost/PADS/Login">Sign in</a>';};?></span>
+<span id="user"><?php if (!empty($uid)){echo '<a href="/PADS/?u='.$uid.'">'.@$name.'</a>';}else{echo '<a href = "/PADS/Login">Sign in</a>';};?></span>
+<?php if (!empty($uid)):?><span id="link"><a href="/pads/link.php">upload</a></span><?php endif;?>
 </div>
 
 <div id="cwrap" onclick="cls('search-box')">
 
 <div id="head">
-<a href="http://localhost/pads"><div id="logo" class="full"></div></a>
+<a href="/pads"><div id="logo" class="full"></div></a>
 
 <div id="bar">
-<span class="cat"><a href="http://localhost/pads/acg/?acg=">AMV</a></span>|
+<span class="cat"><a href="/pads/acg/?acg=">AMV</a></span>|
 <span class="cat">MAD</span>|
-<span class="cat">Vocaloid</span>|
+<span class="cat">BGM</span>|
 <span class="cat">Game</span>|
 <span class="cat">Other</span>
 </div>

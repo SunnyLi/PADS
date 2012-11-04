@@ -1,34 +1,25 @@
 <?php
 //Get danmaku id
 //Player do not POST when requesting file.
-if (isset($_GET['c'])){
-$cid=$_GET['c'];
-}else{
-die('?');
-}
+//ini_set('display_errors', 'On');
+require_once('../sqldb/connect.php');
 
-//Connect Server
-$link = mysql_connect('localhost', 'root', '');
-if (!$link) {
-    die('Not connected : ' . mysql_error());
-}
+isset($_GET['c']) ? $cid=$_GET['c'] : die('?');
+if (!is_numeric($cid)) die();
+	$data_array = explode('.', $cid);
+	$cid = (int)$data_array[0];
+	isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
-//Connect DB
-$db_selected = mysql_select_db('danmaku', $link);
-if (!$db_selected) {
-    die ('No response : ' . mysql_error());
-}
-
-//Set encode?
-mysql_set_charset('utf8', $link);
+$sql = db_connect('danmaku', 'main');
+$sql -> set_charset('utf8');
+date_default_timezone_set('America/Toronto');
 
 //Get file
 $query = 'SELECT * FROM `'.$cid.'`';
-$result = mysql_query($query, $link);
+$result = $sql->query($query);
+//var_dump($result);
 
-//Test if exist
-if(!$result)
-die('404'); //redirect to 404 page
+if(!$result) die('404');
 
 //Outputting
 header('Content-Type:text/xml; charset=utf-8');
@@ -37,10 +28,12 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 echo "<information>\n";
 //echo "<i>";
 
-while($row = mysql_fetch_row($result)){
+while($row = $result->fetch_row()){
 
 //Fix this horrible array thing
-echo "<data><playTime>$row[2]</playTime><message fontsize='$row[4]' color='$row[5]' mode='$row[3]'>$row[7]</message><times>date('Y-m-d H:i', $row[6])</times></data>\n";
+echo "<data><playTime>$row[1]</playTime>
+<message fontsize='$row[3]' color='$row[4]' mode='$row[2]'>$row[6]</message>
+<times>$row[5]</times></data>\n";	//date('Y-m-d H:i', $row[5])
 
 //$var = array($row[2],$row[3],$row[4],$row[5],$row[6]);
 //$property = join(',',$var);

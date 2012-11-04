@@ -31,7 +31,7 @@ z-index: 12;
 /*border: 1px solid red;*/
 }
 
-#name, #search, #user{
+#name, #search, #link, #user{
 margin-top: 1px;
 float: left;
 padding: 0 10px;
@@ -42,7 +42,7 @@ padding: 0;
 }
 #search-box input[type="text"]{margin: 0; padding: 0;}
 #search-box input[type="button"]{height: 22px;}
-#user{
+#user, #link{
 float: right;
 }
 
@@ -83,9 +83,10 @@ padding: 0 10px;
 color: lightgray;
 }
 
-#footer{
+footer{
 clear: both;
 padding-top: 20px;
+text-align: center;
 }
 
 /*old frontpage*/

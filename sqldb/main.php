@@ -1,5 +1,6 @@
 <?php
 
 $user = 'root';
+$pass = '';
 
 ?>

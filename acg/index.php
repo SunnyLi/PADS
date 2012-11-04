@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 'On');
+
 if (!isset($_GET['acg'])) die ('404');
 	$acg = $_GET['acg'];
 
@@ -8,10 +10,11 @@ if (is_numeric($acg)){
 	isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
 	require_once('../sqldb/connect.php');
-	db_connect('data', 'main');//change user 4 security!!
-	//mysql_set_charset('utf8');
-	$query = mysql_query("SELECT * FROM `Handler` WHERE `id`='$id'");
-	$handle = mysql_fetch_row($query);
+	$sql = @db_connect('data', 'main');	//change user 4 security!!
+	//$sql->set_charset("utf8");
+	$query = $sql->query("SELECT * FROM `handler` WHERE `id`='$id'");
+	//var_dump($query);
+	$handle = $query->fetch_row();
 
 	
 	if (!empty($handle)){
@@ -19,11 +22,11 @@ if (is_numeric($acg)){
 
 		switch ($type){
 			case 'vid':
-				$query = mysql_query("SELECT * FROM `video` WHERE `vid`='$id'");
+				$query = $sql->query("SELECT * FROM `video` WHERE `vid`='$id'");
 			break;
 
 			case 'text':
-				$query = mysql_query("SELECT * FROM `txt` WHERE `txt`='$id' AND `part`=$part"); //txt -> text
+				$query = $sql->query("SELECT * FROM `txt` WHERE `txt`='$id' AND `part`=$part"); //txt -> text
 			break;
 
 			case 'code':
@@ -39,11 +42,12 @@ if (is_numeric($acg)){
 			break;
 		}
 		
-		while ($data = mysql_fetch_row($query)){
+		while ($data = $query->fetch_row()){
 		/*uses an array to catch parts
 		$current variable allows perfect tracking of parts
 		so part after a nulled part can still work
 		although I already bypassed this issue.*/
+			//print_r($data);
 			$current = $data[2];
 			$titles[$current] = $data[3];
 			if ($current == $part){
@@ -101,7 +105,7 @@ if(!isset($error)){
 
 	switch ($type){
 		case 'vid':
-			?><embed id="play" src="player.swf" height="445" width="950" rel="nofollow" flashvars=<?php
+			?><embed id="play" src="r9.swf" height="445" width="950" rel="nofollow" allowfullscreen="true" flashvars=<?php
 			echo '"id='.$id.'.'.$part;
 			switch($source[$part]){
 				case 'yt':
@@ -122,7 +126,7 @@ if(!isset($error)){
 	<?php
 	if ($type=='vid'||$type=='code'){
 		echo 'Description:<br />';
-		echo isset($desc) ? $desc : 'not available';
+		echo isset($desc[$part]) ? $desc[$part] : 'not available';
 	}
 
 }else{

@@ -11,31 +11,24 @@ Note:	MySQL disconnects at end of script.
 function get_stream($profile){
 	@require_once($profile.'.php');
 	
-	if($stream = @mysql_connect('localhost', $user, $pass)){
+	$stream = @mysqli_connect('localhost', $user, $pass);
+
+	if($stream){
 		echo 'Currently using connection of '.$profile;
+		return $stream;
 	}else{
 		echo 'No connection to server.';
 	};
 }
 
-//untested function..
-function get_db($db){
-	mysql_select_db($db, $stream);
-}
-
 function db_connect($mysql_db, $profile){
-	require_once($profile.'.php');
+	@require_once($profile.'.php');
 	
-	/*
-	$db = @new mysqli('localhost', $user, $pass, $mysql_db);
-	if ($db->connect_errno) {
-		die('Connect Error: ' . $db->connect_errno);
-	}
-	*/
+	$sql = @mysqli_connect('localhost', $user, $pass, $mysql_db);
 
-	//Procedural
-	if (!@mysql_connect('localhost', $user, $pass) || !@mysql_select_db($mysql_db))
-	die('ERROR: Cannot connect to db server!');
-	
+	if (!$sql)
+		 die('Connect Error: ' . $sql->error);
+			
+	return $sql;
 }
 ?>
