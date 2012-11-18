@@ -1,7 +1,4 @@
 <?php
-//Get danmaku id
-//Player do not POST when requesting file.
-//ini_set('display_errors', 'On');
 require_once('../sqldb/connect.php');
 
 isset($_GET['c']) ? $cid=$_GET['c'] : die('?');
@@ -21,29 +18,28 @@ $result = $sql->query($query);
 
 if(!$result) die('404');
 
-//Outputting
 header('Content-Type:text/xml; charset=utf-8');
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-echo "<information>\n";
-//echo "<i>";
+//echo "<information>\n";
+echo "<i>";
 
 while($row = $result->fetch_row()){
+//var_dump($row);
 
 //Fix this horrible array thing
-echo "<data><playTime>$row[1]</playTime>
+/*echo "<data><playTime>$row[1]</playTime>
 <message fontsize='$row[3]' color='$row[4]' mode='$row[2]'>$row[6]</message>
-<times>$row[5]</times></data>\n";	//date('Y-m-d H:i', $row[5])
+<times>$row[5]</times></data>\n";	//date('Y-m-d H:i', $row[5])*/
 
-//$var = array($row[2],$row[3],$row[4],$row[5],$row[6]);
-//$property = join(',',$var);
-//$message = $row[7];
-//echo '<d p=\'' . $property . '\'>' . $message . '</d>' . "\n";
-
+$var = array($row[1],$row[2],$row[3],$row[4],strtotime($row[5]),$row[7]);
+$property = join(',',$var);
+$message = $row[6];
+echo '<d p=\'' . $property . '\'>' . $message . '</d>' . "\n";
 }
 
-echo "</information>";
-//echo "</i>";
+//echo "</information>";
+echo "</i>";
 
 //free memory... automatically done by end of script
 //mysql_free_result($result);

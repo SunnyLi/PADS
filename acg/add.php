@@ -1,9 +1,7 @@
 <?php
 require_once('../sqldb/connect.php');
-ini_set('display_errors', 'On');
 if (isset($_POST['cid']) && isset($_POST['stime']) && isset($_POST['mode'])
 	&& isset($_POST['size']) && isset($_POST['color']) && isset($_POST['message'])){
-	//MYSQL_REAL_ESCAPE_STRING HTML_ENTITIES!!!
 
   $cid = $_POST['cid'];
   $message = $_POST['message'];
@@ -29,7 +27,17 @@ if (isset($_POST['cid']) && isset($_POST['stime']) && isset($_POST['mode'])
 $sql = db_connect('danmaku', 'main');
 $sql->set_charset('utf8');
 
-$exec="INSERT INTO `$cid` (`id`, `stime`, `mode`, `size`, `color`, `date`, `message`) VALUES ('', $stime, $mode, $size, $color, DEFAULT, '$message')";  //date("F j, Y, g:i a")
+$cid = $sql->real_escape_string($cid);
+$message = $sql->real_escape_string($message);
+$stime = $sql->real_escape_string($stime);
+$mode = $sql->real_escape_string($mode);
+$size = $sql->real_escape_string($size);
+$color = $sql->real_escape_string($color);
+
+session_start();
+$uid = $_SESSION['uid'];
+
+$exec="INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, DEFAULT, '$message', $uid)";
 $sql->query($exec);
 $sql->close();
 }

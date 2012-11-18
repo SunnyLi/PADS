@@ -10,8 +10,8 @@ if (is_numeric($acg)){
 	isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
 	require_once('../sqldb/connect.php');
-	$sql = @db_connect('data', 'main');	//change user 4 security!!
-	//$sql->set_charset("utf8");
+	$sql = db_connect('data', 'main');	//change user 4 security!!
+	$sql->set_charset("utf8");
 	$query = $sql->query("SELECT * FROM `handler` WHERE `id`='$id'");
 	//var_dump($query);
 	$handle = $query->fetch_row();
@@ -110,9 +110,14 @@ if(!isset($error)){
 			switch($source[$part]){
 				case 'yt':
 					echo '&type=youtube';
-				break;
+				case 'url':
+					echo '&file='.$file[$part];
+					break;
+				case 'sina':
+					echo '&type=sina&vid='.$file[$part];
+					break;
 			}
-			echo '&file='.$file[$part].'"/>';
+			echo '"/>';
 		break;
 
 		case 'text':
@@ -122,7 +127,7 @@ if(!isset($error)){
 	}
 
 	?>
-	Share: Like Tweet +1<br />
+	Share: Like Tweet +1<br /><br />
 	<?php
 	if ($type=='vid'||$type=='code'){
 		echo 'Description:<br />';

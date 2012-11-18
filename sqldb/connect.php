@@ -9,9 +9,9 @@ Note:	MySQL disconnects at end of script.
 
 //Connect to database with specifed user
 function get_stream($profile){
-	@require_once($profile.'.php');
+	require($profile.'.php');
 	
-	$stream = @mysqli_connect('localhost', $user, $pass);
+	$stream = mysqli_connect('localhost', $user, $pass);
 
 	if($stream){
 		echo 'Currently using connection of '.$profile;
@@ -22,13 +22,13 @@ function get_stream($profile){
 }
 
 function db_connect($mysql_db, $profile){
-	@require_once($profile.'.php');
-	
-	$sql = @mysqli_connect('localhost', $user, $pass, $mysql_db);
+	require($profile.'.php');
+
+	$sql = mysqli_connect('localhost', $user, $pass, $mysql_db);
 
 	if (!$sql)
-		 die('Connect Error: ' . $sql->error);
-			
+		 die('Connect Error!');
+
 	return $sql;
 }
 ?>

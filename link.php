@@ -1,7 +1,10 @@
 <?php
 require_once('inc/header.php');
+
+if (!isset($_SESSION['uid']))
+	die('insufficient privilege');
+
 require_once('sqldb/connect.php');
-ini_set('display_errors', 'On');
 
 // form processing
 if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
@@ -16,7 +19,7 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 
 	$sql = db_connect('data', 'main');
 	// escape string
-	$sql->set_charset("utf8");	//required for escape
+	$sql->set_charset("utf8");	//required for escape and storing asian character
 	$title = $sql->real_escape_string($title);
 	$desc = $sql->real_escape_string($desc);
 	$tag = $sql->real_escape_string($tag);
@@ -33,23 +36,27 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 		if (!empty($title) && !empty($type) && !empty($cat)
 				&& !empty($src) && !empty($url)){
 			
-			$sql->query("INSERT INTO `handler` (`uid`, `title`, `desc`, `type`, `cat`, `tag`, `thumb`) VALUES (1, '$title', '$desc', 'vid', '$cat', '$tag', '$thumb')");
-			$inc = $sql->insert_id;
-			$sql->query("INSERT INTO `video` (`vid`, `part`, `title`, `desc`, `src`, `url`) VALUES ($inc, DEFAULT, '$title', '$desc', '$src', '$url')");
-			$sql->query('
-				#DANMAKKU
-				CREATE TABLE  `danmaku`.`'.$inc.'` (
-				`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-				`stime` FLOAT UNSIGNED NOT NULL ,
-				`mode` TINYINT UNSIGNED NOT NULL ,
-				`size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
-				`color` MEDIUMINT UNSIGNED NOT NULL ,
-				`date` TIMESTAMP NOT NULL ,
-				`message` VARCHAR(1023) NOT NULL , #255?
-				`uid` INT UNSIGNED DEFAULT 0
-				) ENGINE = MYISAM DEFAULT CHARSET=utf8;'
-			);
-			$sql->close();
+			if ($src === 'yt' || $src === 'sina' || $src === 'url'){
+				$uid = $_SESSION['uid'];
+				$sql->query("INSERT INTO `handler` (`uid`, `title`, `desc`, `type`, `cat`, `tag`, `thumb`) VALUES ($uid, '$title', '$desc', 'vid', '$cat', '$tag', '$thumb')");
+				$inc = $sql->insert_id;
+				$sql->query("INSERT INTO `video` (`vid`, `part`, `title`, `desc`, `src`, `url`) VALUES ($inc, DEFAULT, '$title', '$desc', '$src', '$url')");
+				$sql->query('	#DANMAKKU
+					CREATE TABLE  `danmaku`.`'.$inc.'` (
+					`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+					`stime` FLOAT UNSIGNED NOT NULL ,
+					`mode` TINYINT UNSIGNED NOT NULL ,
+					`size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
+					`color` MEDIUMINT UNSIGNED NOT NULL ,
+					`date` TIMESTAMP NOT NULL ,
+					`message` VARCHAR(1023) NOT NULL , #255?
+					`uid` INT UNSIGNED DEFAULT 0
+					) ENGINE = MYISAM DEFAULT CHARSET=utf8;'
+				);
+				$sql->close();
+			}else{
+				echo 'invalid type';
+			}
 		}else{
 			echo 'not enough parameter passed!';
 		}
@@ -77,8 +84,9 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 <label>Source:</label>	
 	<select name='src'>
 		<option value='yt'>YouTube</option>
+		<option value='sina'>Sina</option>
+		<option value='url'>Local</option>
 		<option>Dailymotion</option>
-		<option>Sina</option>
 	</select>
 	<input type='text' name='url' placeholder='video id'><br />
 <label>Title:</label>	<input type='text' name='title'><br />
