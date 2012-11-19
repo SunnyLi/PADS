@@ -105,7 +105,7 @@ if(!isset($error)){
 
 	switch ($type){
 		case 'vid':
-			?><embed id="play" src="r9.swf" height="445" width="950" rel="nofollow" allowfullscreen="true" flashvars=<?php
+			?><embed id="play" src="/player/r9.swf" height="445" width="950" rel="nofollow" allowfullscreen="true" flashvars=<?php
 			echo '"id='.$id.'.'.$part;
 			switch($source[$part]){
 				case 'yt':

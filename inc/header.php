@@ -51,7 +51,7 @@ document.getElementById(id).innerHTML = '';
 <span id="search" onmouseover="showSearchBox()"><a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/search">Search</a></span>
 <span id="search-box" onselect="showSearchBox()"></span>
 <span id="user"><?php if (!empty($uid)){echo '<a href="/user/logout.php?s='.$uid.'">'.$name.'</a>';}else{echo '<a href = "/user/login.php">Sign in</a>';};?></span>
-<?php if (!empty($uid)):?><span id="link"><a href="/link.php">upload</a></span><?php endif;?>
+<?php if (!empty($uid)):?><span id="link"><a href="/acg/link.php">upload</a></span><?php endif;?>
 </div>
 
 <div id="cwrap" onclick="cls('search-box')">

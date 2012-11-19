@@ -47,7 +47,7 @@ if (!isset($_SESSION['uid'])):?>
 	<h3>Sign Up</h3><hr />
 	<form action='<?php echo $_SERVER['SCRIPT_NAME'] ?>' method='POST'>
 		<label>Username:</label><input type='text' name='user'><?php if(isset($emptyUser)) echo$emptyUser?><br />
-		<label>Email:</label><input type='text' name='mail'><?php if(isset($emptyMail)) echo$emptyMail?><br />
+		<label>Email:</label><input type='email' name='mail'><?php if(isset($emptyMail)) echo$emptyMail?><br />
 		<label>Password:</label><input type='password' name='pass'><?php if(isset($emptyPass)) echo$emptyPass?><br />
 		<label>Confirm Pass:</label><input type='password' name='pass2'><?php if(isset($emptyPass)) echo$emptyPass?><br />
 		<input type='submit' value='post' />

@@ -10,7 +10,8 @@ if (isset($_POST['cid']) && isset($_POST['stime']) && isset($_POST['mode'])
   $size = $_POST['size'];
   $color = $_POST['color'];
   
-	if (!is_numeric($cid)) die();
+	if (!is_numeric($cid) && !is_numeric($stime) && !is_numeric($mode)
+			&& !is_numeric($size) && !is_numeric($color)) die();
 	$data_array = explode('.', $cid);
 	$cid = (int)$data_array[0];
 	isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
@@ -26,6 +27,7 @@ if (isset($_POST['cid']) && isset($_POST['stime']) && isset($_POST['mode'])
 
 $sql = db_connect('danmaku', 'main');
 $sql->set_charset('utf8');
+date_default_timezone_set('America/Toronto');
 
 $cid = $sql->real_escape_string($cid);
 $message = $sql->real_escape_string($message);

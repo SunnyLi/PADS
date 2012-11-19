@@ -1,10 +1,8 @@
 <?php
-require_once('inc/header.php');
+require_once('../inc/header.php');
 
 if (!isset($_SESSION['uid']))
 	die('insufficient privilege');
-
-require_once('sqldb/connect.php');
 
 // form processing
 if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
@@ -17,6 +15,7 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 	$tag = htmlentities($_GET['tag']);
 	$thumb = htmlentities($_GET['thumb']);
 
+	require_once('../sqldb/connect.php');
 	$sql = db_connect('data', 'main');
 	// escape string
 	$sql->set_charset("utf8");	//required for escape and storing asian character
@@ -41,19 +40,11 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 				$sql->query("INSERT INTO `handler` (`uid`, `title`, `desc`, `type`, `cat`, `tag`, `thumb`) VALUES ($uid, '$title', '$desc', 'vid', '$cat', '$tag', '$thumb')");
 				$inc = $sql->insert_id;
 				$sql->query("INSERT INTO `video` (`vid`, `part`, `title`, `desc`, `src`, `url`) VALUES ($inc, DEFAULT, '$title', '$desc', '$src', '$url')");
-				$sql->query('	#DANMAKKU
-					CREATE TABLE  `danmaku`.`'.$inc.'` (
-					`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-					`stime` FLOAT UNSIGNED NOT NULL ,
-					`mode` TINYINT UNSIGNED NOT NULL ,
-					`size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
-					`color` MEDIUMINT UNSIGNED NOT NULL ,
-					`date` TIMESTAMP NOT NULL ,
-					`message` VARCHAR(1023) NOT NULL , #255?
-					`uid` INT UNSIGNED DEFAULT 0
-					) ENGINE = MYISAM DEFAULT CHARSET=utf8;'
-				);
+				$sql->query("CREATE TABLE `danmaku`.`$inc` LIKE `danmaku`.`cmt#`");
 				$sql->close();
+				session_write_close();
+				echo "Video added.";
+				header('refresh:1;/');
 			}else{
 				echo 'invalid type';
 			}
@@ -104,4 +95,4 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 </form>
 </section>
 
-<?php include_once('inc/footer.php') ?>
+<?php include_once('../inc/footer.php') ?>
