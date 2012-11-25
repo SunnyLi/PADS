@@ -12,15 +12,15 @@ if (isset($_POST['user']) && isset($_POST['pass'])){
 		$user = $sql->real_escape_string($user);
 		$pass = $sql->real_escape_string($pass);
 		
-		if($users = $sql->query("SELECT uid, name FROM `user` WHERE user='$user' AND pass=MD5('$pass') LIMIT 1")){
+		if($users = $sql->query("SELECT uid, user, name FROM `user` WHERE user='$user' AND pass=MD5('$pass') LIMIT 1")){
 			//var_dump($users);
 			if($result = $users->fetch_row()){
 				//var_dump($result);
 				$_SESSION['uid'] = $result[0];
-				if($result[1]){
-					$_SESSION['name'] = $result[1];
+				if($result[2]){
+					$_SESSION['name'] = $result[2];	// custom name
 				}else{
-					$_SESSION['name'] = $user;
+					$_SESSION['name'] = $result[1];	// maintain original username case
 				}
 				session_write_close();
 				header('Location: /');
@@ -40,7 +40,7 @@ if (isset($_POST['user']) && isset($_POST['pass'])){
 }
 
 if (!isset($_SESSION['uid'])):?>
-	<h3>Sign in</h3><hr />
+	<h3>Sign in<noscript> (javascript required)</noscript></h3><hr />
 	<form action='<?php echo $_SERVER['SCRIPT_NAME'] ?>' method='POST'>
 		<label>Username:</label><input type='text' name='user'><?php if(isset($emptyUser)) echo$emptyUser?><br />
 		<label>Password:</label><input type='password' name='pass'><?php if(isset($emptyPass)) echo$emptyPass?><br />

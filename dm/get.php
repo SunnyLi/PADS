@@ -34,7 +34,7 @@ while($row = $result->fetch_row()){
 
 $var = array($row[1],$row[2],$row[3],$row[4],strtotime($row[5]),$row[7]);
 $property = join(',',$var);
-$message = htmlentities($row[6]);
+$message = htmlspecialchars($row[6]);
 echo '<d p=\'' . $property . '\'>' . $message . '</d>' . "\n";
 }
 

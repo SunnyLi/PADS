@@ -10,6 +10,7 @@ Security Note: Do not connect using main(root?) account.
 //required moduel fo later use
 require_once('sqldb/connect.php');
 require_once('inc/header.php');
+//ini_set('display_errors', 'On');
 
 //Auto DB Initializer
 $init_db = false;
@@ -35,8 +36,10 @@ echo '<br /><h2>Recent Links</h2><br />';
 
 while($content = $result->fetch_row()){
 	echo '<div class="content" style="background-color: 
-		rgb('.rand(100,256).','.rand(180,256).','.rand(180,256).');">
-		<a href="acg/?acg='.$content[0].'" class="ctitle">'.$content[2].'</a><br />
+		rgb('.rand(100,256).','.rand(180,256).','.rand(180,256).');">';
+		echo !empty($content[10])? '<img class="thumb" src="'.$content[10].'"></img>'
+		: '<div class="thumb">No image<br />available!</div>';
+		echo '<a href="acg/?acg='.$content[0].'" class="ctitle">'.$content[2].'</a><br />
 		<span class="info">'. date($content[9]) .'@'.$content[5].'</span><br />
 		<span class="desc">'.$content[3].'</span></div>';
 }

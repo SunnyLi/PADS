@@ -7,13 +7,6 @@ echo('You are not logged in!');
 die(include_once('../inc/footer.php'));
 }
 
-/*
-danmu format
-parse
-load
-redirect
-*/
-
 if (isset($_POST['vid']) && isset($_POST['send'])){
 	$vid = (int)$_POST['vid'];	//current vid should have no part, add a part box later
 	$cid = $vid;
@@ -37,9 +30,11 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
 			if (!empty($name)){
 				if (($extension == 'xml' || $extension == 'json') && $type == 'text/xml'){
 				//extension security - although fake extension still work but becomes harmless
-					if ($size <= 300000){ //size check
+					if ($size <= 400000){ //size check
 						//move_uploaded_file($temp_loc,$upload_dir.$name);
 						$xml = simplexml_load_file($temp_loc);
+						$sql = db_connect('danmaku', 'main');
+						$sql->set_charset('utf8');
 
 						//bili style
 						foreach($xml -> d as $comment){
@@ -59,9 +54,6 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
 									$size = (int)$size;
 									$color = (int)$color;
 									$date = (int)$date;
-									
-									$sql = db_connect('danmaku', 'main');
-									$sql->set_charset('utf8');
 									$comment = $sql->real_escape_string($comment);
 									
 									$sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
@@ -84,8 +76,106 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
 					}else{
 						echo 'file too big, try uploading in parts';
 					}
+				}else if($extension == 'srt' && $type == 'application/octet-stream'){
+
+					if ($size <= 200000){ //size check
+					/*	SubRip Parser
+						Example result:
+						Array
+						(
+							[0] => stdClass Object
+								(
+									[number] => 1
+									[stopTime] => 00:00:24,400
+									[startTime] => 00:00:20,000
+									[text] => Altocumulus clouds occur between six thousand
+								)
+
+							[1] => stdClass Object
+								(
+									[number] => 2
+									[stopTime] => 00:00:27,800
+									[startTime] => 00:00:24,600
+									[text] => and twenty thousand feet above ground level.
+								)
+
+						)
+					*/
+						try{
+							define('SRT_STATE_SUBNUMBER', 0);
+							define('SRT_STATE_TIME',      1);
+							define('SRT_STATE_TEXT',      2);
+							define('SRT_STATE_BLANK',     3);
+
+							$lines   = file($temp_loc);
+							$subs    = array();
+							$state   = SRT_STATE_SUBNUMBER;
+							$subNum  = 0;
+							$subText = '';
+							$subTime = '';
+
+							foreach($lines as $line) {
+								switch($state) {
+									case SRT_STATE_SUBNUMBER:
+										$subNum = trim($line);
+										$state  = SRT_STATE_TIME;
+										break;
+
+									case SRT_STATE_TIME:
+										$subTime = trim($line);
+										$state   = SRT_STATE_TEXT;
+										break;
+
+									case SRT_STATE_TEXT:
+										if (trim($line) == '') {
+											$sub = new stdClass;
+											$sub->number = $subNum;
+											list($sub->startTime, $sub->stopTime) = explode(' --> ', $subTime);
+											$sub->text   = $subText;
+											$subText     = '';
+											$state       = SRT_STATE_SUBNUMBER;
+
+											$subs[]      = $sub;
+										} else {
+											$subText .= $line;
+										}
+										break;
+								}
+							}
+							
+							$sql = db_connect('danmaku', 'main');
+							$sql->set_charset('utf8');
+
+							$mode = 4;	// bottom
+							$size = 25;
+							$color = 16777215;	// white
+
+							//print_r($subs);
+							foreach($subs as $sub){
+								$stime = str_replace(',', '.', $sub->startTime);
+								$parts = explode(':', $stime);
+								$stime = 0;
+								foreach ($parts as $i => $val) {
+									$stime += $val * pow(60, 2 - $i);
+								}
+								if($stime > 0){
+									$comment = $sql->real_escape_string($sub->text);
+									$sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, DEFAULT, '$comment', $uid)");
+								}
+							}
+							
+							echo 'comments initialized';
+							header('refresh:1;/');
+
+						}catch(Exception $e){
+							echo 'error occurred while parsing data.';
+						}
+					
+					}else{
+						echo 'file too big, try uploading in parts';
+					}
 				}else{
-					echo 'Invalid';
+					echo 'Invalid'.$type;
 				}
 			}else{
 				echo 'No file chosen';

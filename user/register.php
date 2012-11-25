@@ -16,7 +16,7 @@ if (isset($_POST['user']) && isset($_POST['mail']) && isset($_POST['pass']) && i
 			$pass = $sql->real_escape_string($pass);
 			$mail = $sql->real_escape_string($mail);
 			
-			if($result = $sql->query("SELECT uid FROM `user` WHERE user='$user' LIMIT 1")){
+			if($result = $sql->query("SELECT uid FROM `user` WHERE user='$user' LIMIT 1")){		// case insensitive compare
 				if(!$result->fetch_row()){
 					if($sql->query("INSERT INTO `user` (`user`, `pass`, `mail`) VALUES ('$user', MD5('$pass'), '$mail')")){
 						echo 'registered! proceeding to sign in.';

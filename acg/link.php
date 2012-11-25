@@ -7,13 +7,13 @@ if (!isset($_SESSION['uid']))
 // form processing
 if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 	&& isset ($_GET['cat']) && isset ($_GET['tag']) && isset ($_GET['thumb'])){
-	/*htmlentities for html security*/
-	$title = htmlentities($_GET['title']);
-	$desc = htmlentities($_GET['desc']);
-	$type = strtolower(htmlentities($_GET['type']));
-	$cat = strtolower(htmlentities($_GET['cat']));
-	$tag = htmlentities($_GET['tag']);
-	$thumb = htmlentities($_GET['thumb']);
+	/*htmlspecialchars for html security*/
+	$title = htmlspecialchars($_GET['title']);
+	$desc = htmlspecialchars($_GET['desc']);
+	$type = strtolower(htmlspecialchars($_GET['type']));
+	$cat = strtolower(htmlspecialchars($_GET['cat']));
+	$tag = htmlspecialchars($_GET['tag']);
+	$thumb = htmlspecialchars($_GET['thumb']);
 
 	require_once('../sqldb/connect.php');
 	$sql = db_connect('data', 'main');
@@ -25,8 +25,8 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 	$thumb = $sql->real_escape_string($thumb);
 
 	if ($type == 'video'){
-		$src = htmlentities($_GET['src']);
-		$url = htmlentities($_GET['url']);
+		$src = htmlspecialchars($_GET['src']);
+		$url = htmlspecialchars($_GET['url']);
 		
 		$src = $sql->real_escape_string($src);
 		$url = $sql->real_escape_string($url);
@@ -37,6 +37,8 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 			
 			if ($src === 'yt' || $src === 'sina' || $src === 'url'){
 				$uid = $_SESSION['uid'];
+				if ($src === 'yt')
+					$thumb = 'http://img.youtube.com/vi/'.$url.'/default.jpg';
 				$sql->query("INSERT INTO `handler` (`uid`, `title`, `desc`, `type`, `cat`, `tag`, `thumb`) VALUES ($uid, '$title', '$desc', 'vid', '$cat', '$tag', '$thumb')");
 				$inc = $sql->insert_id;
 				$sql->query("INSERT INTO `video` (`vid`, `part`, `title`, `desc`, `src`, `url`) VALUES ($inc, DEFAULT, '$title', '$desc', '$src', '$url')");
@@ -52,9 +54,9 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 			echo 'not enough parameter passed!';
 		}
 	}else if($type == 'article'){
-		$txt = htmlentities($_GET['txt']);
+		$txt = htmlspecialchars($_GET['txt']);
 	}else if($type == 'code'){
-		$src = htmlentities($_GET['src']);
+		$src = htmlspecialchars($_GET['src']);
 	}else{
 		die('GJ');
 	}

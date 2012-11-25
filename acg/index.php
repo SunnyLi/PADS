@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 
 if (!isset($_GET['acg'])) die ('404');
 	$acg = $_GET['acg'];

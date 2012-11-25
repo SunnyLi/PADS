@@ -108,3 +108,15 @@ font-size: 20px;
 font-weight: italics;
 font-size: 12px;
 }
+
+.content .thumb{
+float: left;
+height: 90px;
+margin: 0 10px 0 0;
+}
+
+/*category*/
+.category{
+margin: 5px;
+padding: 10px 20px;
+}
