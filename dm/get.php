@@ -16,8 +16,6 @@ $query = 'SELECT * FROM `'.$cid.'`';
 $result = $sql->query($query);
 //var_dump($result);
 
-if(!$result) die('404');
-
 header('Content-Type:text/xml; charset=utf-8');
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 

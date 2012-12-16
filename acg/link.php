@@ -35,10 +35,10 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 		if (!empty($title) && !empty($type) && !empty($cat)
 				&& !empty($src) && !empty($url)){
 			
-			if ($src === 'yt' || $src === 'sina' || $src === 'url'){
+			if ($src === 'yt' || $src === 'sina' || $src === 'qq' || $src === 'url'){
 				$uid = $_SESSION['uid'];
 				if ($src === 'yt')
-					$thumb = 'http://img.youtube.com/vi/'.$url.'/default.jpg';
+					$thumb = 'http://img.youtube.com/vi/'.$url.'/mqdefault.jpg';
 				$sql->query("INSERT INTO `handler` (`uid`, `title`, `desc`, `type`, `cat`, `tag`, `thumb`) VALUES ($uid, '$title', '$desc', 'vid', '$cat', '$tag', '$thumb')");
 				$inc = $sql->insert_id;
 				$sql->query("INSERT INTO `video` (`vid`, `part`, `title`, `desc`, `src`, `url`) VALUES ($inc, DEFAULT, '$title', '$desc', '$src', '$url')");
@@ -78,6 +78,7 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 	<select name='src'>
 		<option value='yt'>YouTube</option>
 		<option value='sina'>Sina</option>
+		<option value='qq'>QQ</option>
 		<option value='url'>Local</option>
 		<option>Dailymotion</option>
 	</select>

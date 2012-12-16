@@ -115,6 +115,14 @@ height: 90px;
 margin: 0 10px 0 0;
 }
 
+/*user upload manage,
+consists of front page css*/
+.content .option{
+float: right;
+margin: 20px;
+}
+
+
 /*category*/
 .category{
 margin: 5px;

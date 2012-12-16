@@ -116,8 +116,11 @@ if(!isset($error)){
 				case 'sina':
 					echo '&type=sina&vid='.$file[$part];
 					break;
+				case 'qq':
+					echo '&type=qq&vid='.$file[$part];
+					break;
 			}
-			echo '"/>';
+			echo '&autostart=false"/>';
 		break;
 
 		case 'text':
