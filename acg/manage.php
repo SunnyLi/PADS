@@ -46,19 +46,52 @@ if (isset($_GET['rm'])){
 			print_r($content);
 		}*/
 	}
+}else if(isset($_GET['rmdm'])){
+    $rmid = $_GET['rmdm'];
+	$result = $sql->query("SELECT * FROM data.handler WHERE uid=$uid AND id=$rmid");
 
+	if($result->num_rows === 0){
+		die('invalid request');
+	}else if($result->num_rows === 1){
+		$content = $result->fetch_row();
+		if ($content[4] == 'vid'){
+			$result = $sql->query("SELECT part FROM data.video WHERE vid=$rmid ORDER BY part DESC LIMIT 1");
+			//print_r($result->fetch_row());	//test if part is the last
+			$last_part = $result->fetch_row()[0];
+			
+			$sqld = db_connect('danmaku', 'main');
+			$sqld->set_charset("utf8");	//required for escape and storing asian character
+			
+			$sqld->query("TRUNCATE TABLE danmaku.$rmid");   // table should exist since vid exist
+			// up - current,	down - future
+			for($i = 1; $i <= $last_part; $i++){
+				//echo "$rmid.$i";
+				$sqld->query("TRUNCATE TABLE danmaku.$rmid.$i");
+			}
+		}else{
+			echo 'this option is currently unimplemented..';
+		}
+	}else{
+		echo 'database corrupt.. please msg admin';
+		/*while($content = $result->fetch_row()){
+			print_r($content);
+		}*/
+	}
 }
 
 $result = $sql->query("SELECT * FROM data.handler WHERE uid=$uid ORDER BY `date` DESC LIMIT 10");
 
-echo '<br /><h2>Your Stuff</h2><br />';
+echo '<br /><h2>Your Stuff</h2>';
+
+echo '<div class="option"><a href="/dm/load.php">danmaku manage</a></div><br />';
 
 while($content = $result->fetch_row()){
 	echo '<div class="content" style="background-color: lightgrey; width: 640px;">';
 		echo !empty($content[10])? '<img class="thumb" src="'.$content[10].'"></img>'
 		: '<div class="thumb">No image<br />available!</div>';
 		echo '<a href="/v/sv'.$content[0].'" class="ctitle">'.$content[2].'</a>
-		<div class="option"><a href="?rm='.$content[0].'">delete this</a></div><br />
+		<div class="option"><a href="?rm='.$content[0].'">delete this</a><br />
+        <a href="?rmdm='.$content[0].'">clear pool</a></div><br />
 		<span class="info">'. date($content[9]) .'@'.$content[5].'</span><br />
 		<span class="desc">'.$content[3].'</span></div>';
 }

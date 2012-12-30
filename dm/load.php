@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 //TODO: add parts
 require_once('../inc/header.php');
 
@@ -28,48 +28,228 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
 			$extension = substr($name, strpos($name, '.')+1);
 
 			if (!empty($name)){
-				if (($extension == 'xml' || $extension == 'json') && $type == 'text/xml'){
+				if ($extension == 'xml' && $type == 'text/xml'){
 				//extension security - although fake extension still work but becomes harmless
-					if ($size <= 400000){ //size check
+					if ($size <= 3000000){ //size check // need to raise php upload limit!
 						//move_uploaded_file($temp_loc,$upload_dir.$name);
 						$xml = simplexml_load_file($temp_loc);
 						$sql = db_connect('danmaku', 'main');
 						$sql->set_charset('utf8');
 
-						//bili style
-						foreach($xml -> d as $comment){
-							try{
-								$arr = explode(',', $comment['p']);
+                        $rootNode = $xml->getName();
+                        
+                        if($rootNode == 'information'){
+                            foreach($xml->data as $data){
+                                try{
+                                    $stime = (string)$data->playTime;
+                                    $stime = number_format($stime, 1);
+                                    $mode = (int)$data->message['mode'];
+                                    $size = (int)$data->message['fontsize'];
+                                    $color = (int)$data->message['color'];
+                                    $date = (string)$data->times;
+                                    $date = strtotime($date);   // timestamp
+                                    $comment = (string)$data->message;
+                                    $comment = $sql->real_escape_string($comment);
 
-								$stime = $arr[0];
-								$mode = $arr[1];
-								$size = $arr[2];
-								$color = $arr[3];
-								$date = $arr[4];
-								
-								if (is_numeric($stime) && is_numeric($mode)
-								&& is_numeric($size) && is_numeric($color)){
-									$stime = number_format($arr[0], 2);
-									$mode = (int)$mode;
-									$size = (int)$size;
-									$color = (int)$color;
-									$date = (int)$date;
-									$comment = $sql->real_escape_string($comment);
-									
-									$sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
-								}else{
-									echo 'invalid data found. bypassed.';
-								}
-								
-								/*echo 'playtime = '.$stime.' mode = '.$mode.
-									' size = '.$size.' color = '.$color.
-									' date = '.$date.' comment = '.$comment.'<br />';
-								*/
-							}catch(Exception $e){
-								echo 'error occurred while parsing data.';
-							}
-						}
-						
+                                    $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                }catch(Exception $e){
+                                    echo 'error occurred while parsing data.';
+                                }
+                            }
+                        }else if ($rootNode == 'i'){
+                            //bili style
+                            foreach($xml -> d as $comment){
+                                try{
+                                    $arr = explode(',', $comment['p']);
+
+                                    $stime = $arr[0];
+                                    $mode = $arr[1];
+                                    $size = $arr[2];
+                                    $color = $arr[3];
+                                    $date = $arr[4];
+                                    
+                                    if (is_numeric($stime) && is_numeric($mode)
+                                    && is_numeric($size) && is_numeric($color)){
+                                        $stime = number_format($arr[0], 2);
+                                        $mode = (int)$mode;
+                                        $size = (int)$size;
+                                        $color = (int)$color;
+                                        $date = (int)$date;
+                                        $comment = $sql->real_escape_string($comment);
+                                        
+                                        $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                    }else{
+                                        echo 'invalid data found. bypassed.';
+                                    }
+                                    
+                                    /*echo 'playtime = '.$stime.' mode = '.$mode.
+                                        ' size = '.$size.' color = '.$color.
+                                        ' date = '.$date.' comment = '.$comment.'<br />';
+                                    */
+                                }catch(Exception $e){
+                                    echo 'error occurred while parsing data.';
+                                }
+                            }
+						}else if($rootNode == 'packet'){
+                            //nico style
+                            //whitelist
+                            $modeArr = array('ue', 'shita');        // naka is default
+                            $sizeArr = array('big', 'small');       // medium is default
+                            $colorArr = array('red', 'pink', 'orange', 'yellow', 'green', 'cyan', 'blue', 'blue', 'purple', 'black',
+                                                'white2', 'niconicowhite', 'red2', 'truered', 'pink2', 'orange2', 'passionorange',
+                                                'yellow2', 'madeyellow', 'green2', 'elementalgreen', 'cyan2', 'blue2', 'marineblue',
+                                                'purple2', 'nobleviolet', 'black2');
+                                                
+                            $whitelist = array_merge($modeArr, $sizeArr, $colorArr);      // whitelist array
+
+                            foreach($xml->chat as $comment){
+                                if (isset($comment['vpos']) && isset($comment['mail'])){
+                                    try{
+                                        // ===== check vpos =====
+                                        $stime = $comment['vpos']->__toString();    // get actual value
+                                        if (!is_numeric($stime))
+                                            continue;   // fail, try next case
+
+                                        $stime = $comment['vpos'];
+                                        if($stime > 30000)  // glitch fix? video_sec * 100, current: 5min
+                                            $stime /= 10;
+                                        $stime /= 100;
+                                        $stime = number_format($stime, 2);
+                                        
+                                        // ===== check date =====
+                                        $date = (int)$comment['date'];  // may cause unexpected failure
+
+                                        // ===== check mail =====
+                                        // Default values
+                                        $mode = 1;
+                                        $size = 25;
+                                        $color = 16777215;
+
+                                        // filter
+                                        $mail = strtolower($comment['mail']);   // converts to string also!
+                                        if (strpos($mail,'invisible') !== false)
+                                            continue;
+
+                                        preg_match('/#([0-9a-f]{6})\b/', $mail, $colorReg);
+                                        
+                                        $mail = explode(' ', $mail);            // original array
+                                        $para = array_values(array_intersect($whitelist, $mail));
+
+                                        if(!empty($para)){
+
+                                            $i = 0;     // iterator
+
+                                            if (isset($para[$i]))
+                                                if (in_array($para[$i], $modeArr)){
+                                                    switch ($para[$i]){
+                                                        case 'ue':
+                                                            $mode = 5;
+                                                            break;
+                                                        case 'shita':
+                                                            $mode = 4;
+                                                            break;
+                                                    }
+                                                    $i++;
+                                                }
+
+                                            if (isset($para[$i]))
+                                                if (in_array($para[$i], $sizeArr)){
+                                                    switch ($para[$i]){
+                                                        case 'big':
+                                                            $size = 36;
+                                                            break;
+                                                        case 'small':
+                                                            $size = 16;
+                                                            break;
+                                                    }
+                                                    $i++;
+                                                }
+
+                                            if (!isset($colorReg[1]) && isset($para[$i]))
+                                                if (in_array($para[$i], $colorArr))
+                                                    switch ($para[$i]){
+                                                        case 'red':
+                                                            $color = hexdec('FF0000');
+                                                            break;
+                                                        case 'pink':
+                                                            $color = hexdec('FF8080');
+                                                            break;
+                                                        case 'orange':
+                                                            $color = hexdec('FFC000');
+                                                            break;
+                                                        case 'yellow':
+                                                            $color = hexdec('FFFF00');
+                                                            break;
+                                                        case 'green':
+                                                            $color = hexdec('00FF00');
+                                                            break;
+                                                        case 'cyan':
+                                                            $color = hexdec('00FFFF');
+                                                            break;
+                                                        case 'blue':
+                                                        case 'ｂlue':
+                                                            $color = hexdec('0000FF');
+                                                            break;
+                                                        case 'purple':
+                                                            $color = hexdec('C000FF');
+                                                            break;
+                                                        case 'black':
+                                                            $color = 0;
+                                                            break;
+                                                        case 'white2':
+                                                        case 'niconicowhite':
+                                                            $color = hexdec('CCCC99');
+                                                            break;
+                                                        case 'red2':
+                                                        case 'truered':
+                                                            $color = hexdec('CC0033');
+                                                            break;
+                                                        case 'pink2':
+                                                            $color = hexdec('FF33CC');
+                                                            break;
+                                                        case 'orange2':
+                                                        case 'passionorange':
+                                                            $color = hexdec('FF6600');
+                                                            break;
+                                                        case 'yellow2':
+                                                        case 'madeyellow':
+                                                            $color = hexdec('999900');
+                                                            break;
+                                                        case 'green2':
+                                                        case 'elementalgreen':
+                                                            $color = hexdec('00CC66');
+                                                            break;
+                                                        case 'cyan2':
+                                                            $color = hexdec('00CCCC');
+                                                            break;
+                                                        case 'blue2':
+                                                        case 'marineblue':
+                                                            $color = hexdec('3399FF');
+                                                            break;
+                                                        case 'purple2':
+                                                        case 'nobleviolet':
+                                                            $color = hexdec('6633CC');
+                                                            break;
+                                                        case 'black2':
+                                                            $color = hexdec('666666');
+                                                            break;
+                                                    }
+                                        }
+                                        
+                                        if(isset($colorReg[1]))
+                                            $color = hexdec($colorReg[1]);
+                                        
+                                        $comment = $comment->__toString();
+                                        $comment = $sql->real_escape_string($comment);
+                                        $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                        
+                                    }catch(Exception $e){
+                                        echo 'error occurred while parsing data.';
+                                    }
+                                }
+                            }
+                        }
+                        
 						echo 'comments initialized';
 						header('refresh:1;/');
 
