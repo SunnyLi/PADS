@@ -256,7 +256,145 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
 					}else{
 						echo 'file too big, try uploading in parts';
 					}
-				}else if($extension == 'srt' && $type == 'application/octet-stream'){
+				}else if($extension == 'json' && ($type == 'application/json' || $type == 'application/octet-stream')){
+                    // assume new acfun format
+                    $json = json_decode(file_get_contents($temp_loc), true);
+
+                    $sql = db_connect('danmaku', 'main');
+					$sql->set_charset('utf8');
+                    
+                        foreach($json as $comment){
+                        
+                            try{
+                                $arr = explode(',', $comment['c']);
+
+                                $stime = $arr[0];
+                                $mode = $arr[2];
+                                $size = $arr[3];
+                                $color = $arr[1];
+                                $date = $arr[5];
+                                
+                                if (is_numeric($stime) && is_numeric($mode)
+                                && is_numeric($size) && is_numeric($color)){
+                                    $stime = number_format($arr[0], 2);
+                                    $mode = (int)$mode;
+                                    $size = (int)$size;
+                                    $color = (int)$color;
+                                    $date = (int)$date;
+                                    $comment = (string)$comment['m'];   // not an array
+                                }else{
+                                    echo 'invalid data found. bypassed.';
+                                    continue;
+                                }
+                                
+                                // create bili style
+                                if ($mode == 7){
+                                    $para = json_decode($comment, true);
+                                    $comment = $para['n'];
+                                    
+                                    if (!isset($para['p']['x']) || !isset($para['p']['y']))
+                                        continue;   // basic coordinate not set!
+                                    
+                                    $x = (int)($para['p']['x'] * 0.3);
+                                    $y = (int)($para['p']['y'] * 0.43);
+                                    
+                                    $duration = 4;
+                                    $opacity = 1;
+                                    $shadow = false;
+                                    //$oSize = $size;  // original
+                                    
+                                    if (isset($para['l'])){
+                                        $stime += $para['l'];
+                                        $stime = number_format($stime, 1);
+                                    }
+                                    
+                                    if (isset($para['c']))
+                                        if ($para['c'] > 0){    // check isset?
+                                            $color = $para['c'];
+                                        }
+                                    
+                                    if (isset($para['a']))
+                                        $opacity = $para['a'] + 0;
+                                    
+                                    if (isset($para['b']))
+                                        if ($para['b'] == true) // or is it bold??
+                                            $shadow = true;
+
+                                    /*if (isset($para['f'])){
+                                        $size *= $para['f'] * 0.8;  //floor it?
+                                    }*/
+                                    
+                                    if (isset($para['z'])){
+                                        //transition
+                                        $text = $comment;
+                                        $toX = $x;
+                                        $toY = $y;
+                                        $opacity2 = $opacity;
+                                        
+                                        $iterations = count($para['z']);
+                                        
+                                        foreach($para['z'] as $trans){
+                                            // ignore color change for now
+                                            // idea: color2 - (color2 - color) // iterations
+
+                                            $duration = 4;
+                                            if (isset($trans['l']))
+                                                if (is_numeric($trans['l']))
+                                                    $duration = $trans['l'];
+                                            
+                                            if (isset($trans['x']))
+                                                $toX = (int)($trans['x'] * 0.3);
+                                            
+                                            if (isset($trans['y']))
+                                                $toY = (int)($trans['y'] * 0.43);
+                                            
+                                            if (isset($trans['t']))
+                                                $opacity2 = $trans['t'] + 0;
+                                            
+                                            // don't know what shadow value takes..
+                                            $comment = "[\"$x\",\"$y\",\"$opacity-$opacity2\",\"$duration\",\"$text\",\"0\",\"0\",\"$toX\",\"$toY\",\"$duration\",\"0\"]";
+                                            
+                                            // insert here
+                                            $comment = $sql->real_escape_string($comment);
+                                            $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                            
+                                            // set for next interation
+                                            $x = $toX;
+                                            $y = $toY;
+                                            $stime += $duration;
+                                            $stime = number_format($stime, 1);
+                                            $opacity = $opacity2;
+                                            
+                                            //if (isset($trans['f']))
+                                            //    $size = $oSize * $trans['f'] * 0.8;
+                                            
+                                            // echo 'playtime = '.$stime.' mode = '.$mode.' size = '.$size.' color = '.$color.' date = '.$date.' comment = '.$comment.'<br />';
+                                        }
+                                        
+                                    }else{
+                                        // assemble basic mode 7 cmt, shade ignored
+                                        $comment = "[\"$x\",\"$y\",\"$opacity-$opacity\",\"$duration\",\"$comment\",\"0\",\"0\"]";
+                                        $comment = $sql->real_escape_string($comment);
+                                        
+                                        $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                        
+                                        // echo 'playtime = '.$stime.' mode = '.$mode.' size = '.$size.' color = '.$color.' date = '.$date.' comment = '.$comment.'<br /><br />';
+                                    }
+                                }else{
+                                    // default insert
+                                    $comment = $sql->real_escape_string($comment);
+                                    $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                }
+                                
+                            }catch(Exception $e){
+                                echo 'error occurred while parsing data.';
+                            }
+                        }
+                        
+						echo 'comments initialized';
+						header('refresh:1;/');
+                        
+                }else if($extension == 'srt' && $type == 'application/octet-stream'){
 
 					if ($size <= 200000){ //size check
 					/*	SubRip Parser

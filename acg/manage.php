@@ -15,6 +15,10 @@ $uid = $_SESSION['uid'];
 // delete content
 if (isset($_GET['rm'])){
 	$rmid = $_GET['rm'];
+    
+    if (!is_numeric($rmid))
+        die('invalid');
+    
 	$result = $sql->query("SELECT * FROM data.handler WHERE uid=$uid AND id=$rmid");
 
 	if($result->num_rows === 0){
@@ -48,6 +52,10 @@ if (isset($_GET['rm'])){
 	}
 }else if(isset($_GET['rmdm'])){
     $rmid = $_GET['rmdm'];
+    
+    if (!is_numeric($rmid))
+        die('invalid');
+    
 	$result = $sql->query("SELECT * FROM data.handler WHERE uid=$uid AND id=$rmid");
 
 	if($result->num_rows === 0){
