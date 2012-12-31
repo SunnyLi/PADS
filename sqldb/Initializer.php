@@ -5,9 +5,10 @@ ACG Initializer
 Set-up database for the site to function.
 
 Note: Only one SQL Statement is allowed at a time.
+        for creating tables
 
 #SUNNY'S DATABASE AUTO-GENERATE SCRIPT
-#Last updated on Nov 3, 2012
+#Last updated on Dec 31, 2012
 */
 
 //Connection Script
@@ -39,7 +40,7 @@ CREATE TABLE `ppl`.`user` (
 `pass` VARCHAR(32) NOT NULL,
 `salt` VARCHAR(16) NOT NULL,
 `mail` VARCHAR(64) NOT NULL,
-`name` VARCHAR(64),
+`name` VARCHAR(32),
 `bday` DATE,
 `bio` TEXT,
 `share` VARCHAR(128),
@@ -145,6 +146,7 @@ CREATE TABLE `data`.`code` (
 	echo '<br />';
 }
 
+/*
 if ($sql->query('
 #SCRIPT PAGE
 CREATE TABLE `data`.`page` (
@@ -158,7 +160,9 @@ CREATE TABLE `data`.`page` (
 	echo $sql->error;
 	echo '<br />';
 }
+*/
 
+/* // This makes no sense! need a seperate db!
 if ($sql->query('
 #COMMENTS
 CREATE TABLE  `data`.`comments` (
@@ -176,7 +180,7 @@ CREATE TABLE  `data`.`comments` (
 	echo $sql->error;
 	echo '<br />';
 }
-
+*/
 
 //===============================================
 
@@ -198,11 +202,14 @@ CREATE TABLE  `danmaku`.`cmt#` (
 `size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
 `color` MEDIUMINT UNSIGNED NOT NULL ,
 `date` TIMESTAMP NOT NULL ,
-`message` VARCHAR(1023) NOT NULL , #255?
+`message` VARCHAR(2000) NOT NULL ,
+`lock` BOOLEAN NOT NULL DEFAULT 0 ,
 `uid` INT UNSIGNED DEFAULT 0
-) ENGINE = MYISAM DEFAULT CHARSET=utf8;'
-)){
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+')){
 	echo '&nbsp;&nbsp;-Table Created: DMK<br />';
+}else{
+    echo $sql->error, '<br />';
 }
 
 echo '===== Configuration Complete! =====<br /><br />';

@@ -1,6 +1,8 @@
 #SUNNY'S DATABASE AUTO-GENERATE SCRIPT
-#Last updated on Nov 3, 2012
+#Last updated on DEC 31, 2012
 
+# DEFAULT is fine as long as not manually inserting NULL
+# NOT NULL prevents manually inserting NULL
 
 #=============== INITIALIZE DATABASE ===============
 
@@ -13,7 +15,7 @@ CREATE TABLE `ppl`.`user` (
 `pass` VARCHAR(32) NOT NULL,
 `salt` VARCHAR(16) NOT NULL,
 `mail` VARCHAR(64) NOT NULL,
-`name` VARCHAR(64),
+`name` VARCHAR(32),
 `bday` DATE,
 `bio` TEXT,
 `share` VARCHAR(128),
@@ -77,6 +79,7 @@ CREATE TABLE `data`.`code` (
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 #SCRIPT PAGE
+# not safe unless internal pages
 CREATE TABLE `data`.`page` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `page` BIGINT UNSIGNED NOT NULL ,
@@ -84,6 +87,7 @@ CREATE TABLE `data`.`page` (
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 #COMMENTS
+# this table makes no sense?!?!?!?
 CREATE TABLE  `data`.`comments` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `cid` BIGINT UNSIGNED NOT NULL ,
@@ -105,7 +109,8 @@ CREATE TABLE  `danmaku`.`cmt#` (
 `size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
 `color` MEDIUMINT UNSIGNED NOT NULL ,
 `date` TIMESTAMP NOT NULL ,
-`message` VARCHAR(1023) NOT NULL , #255?
+`message` VARCHAR(2000) NOT NULL ,
+`lock` BOOLEAN NOT NULL DEFAULT 0 ,
 `uid` INT UNSIGNED DEFAULT 0
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
