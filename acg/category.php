@@ -11,6 +11,7 @@ $cats = array(
 //print_r($cats);
 
 function cat($cat){
+    // global $cats;    // need this in other files..
 	foreach ($cats as $cats => $subcat)
 		foreach ($subcat as $subcat)
 			if ($cat == $subcat)

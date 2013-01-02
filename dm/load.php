@@ -301,6 +301,7 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                     
                                     $duration = 4;
                                     $opacity = 1;
+                                    $rZ = $rY = 0;
                                     $shadow = 'false';
                                     $oSize = $size;  // original
                                     
@@ -320,8 +321,11 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                         if ($para['b'] == true) // or is it bold??
                                             $shadow = 'true';
 
+                                    // outer size check
                                     if (isset($para['f'])){
                                         $size = $para['f'] + 0;
+                                        // reflection effect: must be along x-axis in the original block
+                                        $para['f'] < 0 ? $rZ = $rY = 180 : $rZ = $rY = 0;
                                         if ($size < 0) $size *= -1;
                                         $size *= $oSize;
                                     }
@@ -355,9 +359,13 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                                 
                                             if (isset($trans['c']))
                                                 $color = $trans['c'];
+
+                                            // reflection effect: must be along x-axis in the z-block
+                                            if (isset($trans['g']))
+                                                $trans['g'] < 0 ? $rZ = $rY = 180 : $rZ = $rY = 0;
                                             
                                             // mode 7 advanced
-                                            $comment = "[\"$x\",\"$y\",\"$opacity-$opacity2\",\"$duration\",\"$text\",\"0\",\"0\",\"$toX\",\"$toY\",\"".($duration * 1000)."\",\"0\",\"$shadow\"]";
+                                            $comment = "[\"$x\",\"$y\",\"$opacity-$opacity2\",\"$duration\",\"$text\",\"$rZ\",\"$rY\",\"$toX\",\"$toY\",\"".($duration * 1000)."\",\"0\",\"$shadow\"]";
                                             
                                             // font size change
                                             if (isset($trans['f'])){
@@ -365,17 +373,18 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                                 $change = (int)abs($size - $newSize);   // or is it $oSize?
                                                 if ($change > 5){ // check if change is worth it..
                                                     // slice the value changes
-                                                    if ($duration > 5){
-                                                        $change = (int)($duration / 2);
+                                                    if ($duration > 4){
+                                                        $change = (int)$duration;
                                                     }else{
-                                                        $change = 5;
+                                                        $change = 4;
                                                     }
                                                     $sliceX = (int)(($toX - $x) / $change);
                                                     $sliceY = (int)(($toY - $y) / $change);
                                                     $sliceT = ($opacity2 - $opacity) / $change;
                                                     $sliceD = $duration / $change;
                                                     $sliceS = (int)(($newSize - $size) / $change);
-                                                    $tempDur = number_format(($sliceD / $change), 2);
+                                                    $tempDur = number_format(($sliceD / $change), 2) + 0.3; // slow down
+                                                    $tempDur2 = $tempDur * 1000;
                                                     for ($loop = 0; $loop < $change; $loop++){
                                                         $tranX = $x + (int)($sliceX * $loop);
                                                         $tranY = $y + (int)($sliceY * $loop);
@@ -383,28 +392,26 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                                         $tranY2 = $y + (int)($sliceY * ($loop + 1));
                                                         $op1 = $opacity + number_format(($sliceT * $loop), 2);
                                                         $op2 = $opacity + number_format(($sliceT * ($loop + 1)), 2);
-                                                        // changing important outer variable
-                                                        $stime += $tempDur;
-                                                        $size += $sliceS;
                                                         
-                                                        $comment = "[\"$tranX\",\"$tranY\",\"$op1-$op2\",\"$tempDur\",\"$text\",\"0\",\"0\",\"$tranX2\",\"$tranY2\",\"".($tempDur * 1000)."\",\"0\",\"$shadow\"]";
+                                                        $comment = "[\"$tranX\",\"$tranY\",\"$op1-$op2\",\"$tempDur\",\"$text\",\"$rZ\",\"$rY\",\"$tranX2\",\"$tranY2\",\"$tempDur2\",\"0\",\"$shadow\"]";
                                                         
                                                         $comment = $sql->real_escape_string($comment);
                                                         $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                                        
+                                                        if ($loop < $change - 1){
+                                                            // changing important outer variable
+                                                            $stime += $tempDur;
+                                                            $size += $sliceS;
+                                                        }
                                                     }
                                                     $comment = ''; // have to reset cause the comment was sql escaped..
                                                 }
                                             }
                                             
-                                            // reflection effect: must be along x-axis
-                                            if (isset($trans['f']))
-                                                if ($trans['f'] < 0)
-                                                    $comment = "[\"$x\",\"$y\",\"$opacity-$opacity2\",\"$duration\",\"$text\",\"180\",\"180\",\"$toX\",\"$toY\",\"".($duration * 1000)."\",\"0\",\"$shadow\"]";
-                                            
                                             // insert here
                                             $comment = $sql->real_escape_string($comment);
                                             if ($comment != '')
-                                            $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
+                                                $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");
                                             
                                             // set for next interation
                                             $x = $toX;
@@ -413,8 +420,9 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                             $stime = number_format($stime, 1);
                                             $opacity = $opacity2;
                                             
-                                            if (isset($para['f'])){
-                                                $size = $para['f'] + 0;
+                                            // z-block size check
+                                            if (isset($trans['f'])){
+                                                $size = $trans['f'] + 0;
                                                 if ($size < 0) $size *= -1;
                                                 $size *= $oSize;
                                             }
@@ -424,7 +432,7 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                         
                                     }else{
                                         // assemble basic mode 7 cmt, shade ignored
-                                        $comment = "[\"$x\",\"$y\",\"$opacity-$opacity\",\"$duration\",\"$comment\",\"0\",\"0\"]";
+                                        $comment = "[\"$x\",\"$y\",\"$opacity-$opacity\",\"$duration\",\"$comment\",\"$rZ\",\"$rY\"]";
                                         $comment = $sql->real_escape_string($comment);
                                         
                                         $sql -> query("INSERT INTO `$cid` (`stime`, `mode`, `size`, `color`, `date`, `message`, `uid`) VALUES ($stime, $mode, $size, $color, FROM_UNIXTIME($date), '$comment', $uid)");

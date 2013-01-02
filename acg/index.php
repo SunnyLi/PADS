@@ -18,6 +18,15 @@ if (is_numeric($acg)){
 
 	
 	if (!empty($handle)){
+        $upid = $handle[1];
+        $sqlu = db_connect('ppl', 'main');	//change user 4 security!!
+        $sqlu->set_charset("utf8");
+        $query = $sqlu->query("SELECT * FROM `user` WHERE `uid`='$upid'");
+        $upInfo = $query->fetch_row();
+        $up_name = 'undefined';
+        if (!empty($upInfo))
+            $up_name = $upInfo[1];
+        $sqlu->close();
 		$type = $handle[4];
 
 		switch ($type){
@@ -84,20 +93,47 @@ if (is_numeric($acg)){
 		}
 		
 	}else{
-	$error[] = 'non existant';
+        $error[] = 'non existant';
 	}
 
 }else{
-$error[] = 'url error';
+    $error[] = 'url error';
 }
 
 
 
 include_once('../inc/header.php');
 
+// functions copied from category.php
+$cats = array(
+    'Douga' => array('AMV', 'MAD', 'MMD'),
+    'Music' => array('Vocaloid', 'OP/ED', 'BGM'),
+    'Games' => array('Touhou', 'Doujin', 'Console'),
+    'Other' => array()
+);
+//print_r($cats);
+
+function cat($cat){
+    global $cats;
+    
+    foreach ($cats as $kats => $subcat){
+        foreach ($subcat as $subcat){
+            if (strtolower($cat) == strtolower($subcat))
+                return $kats.' - '.$subcat;
+        }
+    }
+    return false;
+}
+// shows that category is valid
+//echo cat('a')?'true':'false' ;
+
 if(!isset($error)){
-	echo '<div id="cat">'.$category.'</div><br />';
+
+	echo '<div id="cat">';
+    echo cat($category);
+    echo '</div><br />';
 	echo '<h2>'.$title.'</h2>';
+    echo '<span style="float: right">up: <a href="/user/'.$upid.'">'.$up_name.'</a></span>';
 	echo isset($up_time[$part]) ? $up_time[$part] : $handle[9] ;
 	//just in case
 	//author stuff float right
@@ -130,7 +166,7 @@ if(!isset($error)){
 	}
 
 	?>
-	Share: Like Tweet +1<br /><br />
+	Share: unavailable in alpha<br /><br />
 	<?php
 	if ($type=='vid'||$type=='code'){
 		echo 'Description:<br />';
