@@ -383,7 +383,7 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                                                     $sliceT = ($opacity2 - $opacity) / $change;
                                                     $sliceD = $duration / $change;
                                                     $sliceS = (int)(($newSize - $size) / $change);
-                                                    $tempDur = number_format(($sliceD / $change), 2) + 0.3; // slow down
+                                                    $tempDur = number_format(($sliceD / $change), 2) + 0.2; // slow down
                                                     $tempDur2 = $tempDur * 1000;
                                                     for ($loop = 0; $loop < $change; $loop++){
                                                         $tranX = $x + (int)($sliceX * $loop);

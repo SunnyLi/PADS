@@ -36,7 +36,7 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 				&& !empty($src) && !empty($url)){
 			
 			if ($src === 'yt' || $src === 'sina' || $src === 'qq' || $src === 'url'){
-				$uid = $_SESSION['uid'];
+				// $uid = $_SESSION['uid'];
 				if ($src === 'yt')
 					$thumb = 'http://img.youtube.com/vi/'.$url.'/mqdefault.jpg';
 				$sql->query("INSERT INTO `handler` (`uid`, `title`, `desc`, `type`, `cat`, `tag`, `thumb`) VALUES ($uid, '$title', '$desc', 'vid', '$cat', '$tag', '$thumb')");

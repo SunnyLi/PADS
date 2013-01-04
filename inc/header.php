@@ -61,11 +61,11 @@ document.getElementById(id).innerHTML = '';
 <a href="/"><div id="logo" class="full"></div></a>
 
 <div id="bar">
-<span class="cat"><a href="/acg/?acg=">AMV</a></span>|
-<span class="cat">MAD</span>|
-<span class="cat">BGM</span>|
-<span class="cat">Game</span>|
-<span class="cat">Other</span>
+<span class="cat"><a href="/acg/category.php?cat=amv">AMV</a></span>|
+<span class="cat"><a href="/acg/category.php?cat=mad">MAD</a></span>|
+<span class="cat"><a href="/acg/category.php?cat=bgm">BGM</a></span>|
+<span class="cat"><a href="/acg/category.php?cat=?">Game</a></span>|
+<span class="cat"><a href="/acg/category.php?cat=?">Other</a></span>
 </div>
 
 </div>

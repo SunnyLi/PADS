@@ -10,7 +10,7 @@ if (isset($_POST['user']) && isset($_POST['mail']) && isset($_POST['pass']) && i
 	if(!empty($user) && !empty($mail) && !empty($pass) && !empty($pass2)){
 		if($pass === $pass2){
 			require_once('../sqldb/connect.php');
-			$sql = db_connect('ppl', 'main');
+			$sql = db_connect('data', 'main');
 			
 			$user = $sql->real_escape_string($user);
 			$pass = $sql->real_escape_string($pass);
@@ -18,7 +18,7 @@ if (isset($_POST['user']) && isset($_POST['mail']) && isset($_POST['pass']) && i
 			
 			if($result = $sql->query("SELECT uid FROM `user` WHERE user='$user' LIMIT 1")){		// case insensitive compare
 				if(!$result->fetch_row()){
-					if($sql->query("INSERT INTO `user` (`user`, `pass`, `mail`) VALUES ('$user', MD5('$pass'), '$mail')")){
+					if($sql->query("INSERT INTO `user` (`user`, `pass`, `mail`, `name`) VALUES ('$user', MD5('$pass'), '$mail', `$user`)")){
 						echo 'registered! proceeding to sign in.';
 						header('refresh:2;/user/login.php');
 					}else{

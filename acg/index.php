@@ -15,18 +15,14 @@ if (is_numeric($acg)){
 	$query = $sql->query("SELECT * FROM `handler` WHERE `id`='$id'");
 	//var_dump($query);
 	$handle = $query->fetch_row();
-
 	
 	if (!empty($handle)){
         $upid = $handle[1];
-        $sqlu = db_connect('ppl', 'main');	//change user 4 security!!
-        $sqlu->set_charset("utf8");
-        $query = $sqlu->query("SELECT * FROM `user` WHERE `uid`='$upid'");
+        $query = $sql->query("SELECT * FROM `user` WHERE `uid`='$upid'");
         $upInfo = $query->fetch_row();
         $up_name = 'undefined';
         if (!empty($upInfo))
             $up_name = $upInfo[1];
-        $sqlu->close();
 		$type = $handle[4];
 
 		switch ($type){
@@ -61,10 +57,10 @@ if (is_numeric($acg)){
 			$titles[$current] = $data[3];
 			if ($current == $part){
 				if($type == 'vid'){
-					$source[$current] = $data[5];
-					$file[$current] = $data[6];
+					$source[$current] = $data[6];
+					$file[$current] = $data[7];
 					$desc[$current] = $data[4];
-					$up_time[$current] = $data[7];
+					$up_time[$current] = $data[8];
 				}
 				if($type == 'text'){
 					$text[$current] = $data[4];

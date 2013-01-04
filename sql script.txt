@@ -1,15 +1,16 @@
 #SUNNY'S DATABASE AUTO-GENERATE SCRIPT
-#Last updated on DEC 31, 2012
+#Last updated on JAN 3, 2013
 
 # DEFAULT is fine as long as not manually inserting NULL
 # NOT NULL prevents manually inserting NULL
 
 #=============== INITIALIZE DATABASE ===============
 
-CREATE DATABASE  `ppl` ;
+CREATE DATABASE  `data` ;
 
 #USER
-CREATE TABLE `ppl`.`user` (
+#SECURITY WARNING: split access data from login info..
+CREATE TABLE `data`.`user` (
 `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `user` VARCHAR(32) NOT NULL,
 `pass` VARCHAR(32) NOT NULL,
@@ -17,17 +18,12 @@ CREATE TABLE `ppl`.`user` (
 `mail` VARCHAR(64) NOT NULL,
 `name` VARCHAR(32),
 `bday` DATE,
-`bio` TEXT,
+`bio` VARCHAR(1000),
 `share` VARCHAR(128),
 `perm` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-`reg_key` VARCHAR(16),
+`reg_key` VARCHAR(16),  # maybe merge with perm..
 `last` DATE
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
-
-#SECURITY WARNING: split access data from login info..
-
-
-CREATE DATABASE  `data` ;
 
 #MEDIA HANDLER
 CREATE TABLE  `data`.`handler` (
@@ -42,7 +38,7 @@ CREATE TABLE  `data`.`handler` (
 `perm` TINYINT UNSIGNED NOT NULL DEFAULT 0,
 `date` TIMESTAMP NOT NULL,
 `thumb` VARCHAR(255),
-`log` VARCHAR(128)
+`log` VARCHAR(128)  # some admin message?
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 #VIDEO
@@ -50,8 +46,9 @@ CREATE TABLE  `data`.`video` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `vid` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1 ,
-`title` VARCHAR(128) ,
-`desc` TEXT ,
+`title` VARCHAR(128) ,  # show some words if it's NULL..
+`desc` VARCHAR(1000) ,
+`dur` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
 `src` VARCHAR(16) NOT NULL ,
 `url` VARCHAR(255) NOT NULL ,
 `date` TIMESTAMP NOT NULL
@@ -109,18 +106,15 @@ CREATE TABLE  `danmaku`.`cmt#` (
 `size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
 `color` MEDIUMINT UNSIGNED NOT NULL ,
 `date` TIMESTAMP NOT NULL ,
-`message` VARCHAR(2000) NOT NULL ,
+`message` VARCHAR(1000) NOT NULL ,
 `lock` BOOLEAN NOT NULL DEFAULT 0 ,
 `uid` INT UNSIGNED DEFAULT 0
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 
-
 #========== DROP DATABASE(TESTING PURPOSES) ==========
-#DROP DATABASE IF EXISTS `ppl`;
 #DROP DATABASE IF EXISTS `data`;
 #DROP DATABASE IF EXISTS `danmaku`;
-
 
 
 #==================== COMMANDS ====================

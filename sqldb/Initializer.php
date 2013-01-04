@@ -8,7 +8,7 @@ Note: Only one SQL Statement is allowed at a time.
         for creating tables
 
 #SUNNY'S DATABASE AUTO-GENERATE SCRIPT
-#Last updated on Dec 31, 2012
+#Last updated on Jan 3, 2013
 */
 
 //Connection Script
@@ -20,13 +20,12 @@ $sql = get_stream('main');
 //Notice..
 echo '<br /><br />ACG Auto-Generation Script<hr />';
 
-
 //===============================================
 
 if ($sql->query('
-CREATE DATABASE  `ppl`
+CREATE DATABASE  `data`
 ')){
-	echo '+DATABASE CREATED: User<br />';
+	echo '+DATABASE CREATED: Content<br />';
 }else{
 	echo $sql->error;
 	echo '<br />';
@@ -34,7 +33,8 @@ CREATE DATABASE  `ppl`
 
 if ($sql->query(
 '#USER
-CREATE TABLE `ppl`.`user` (
+#SECURITY WARNING: split access data from login info..
+CREATE TABLE `data`.`user` (
 `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `user` VARCHAR(32) NOT NULL,
 `pass` VARCHAR(32) NOT NULL,
@@ -42,28 +42,14 @@ CREATE TABLE `ppl`.`user` (
 `mail` VARCHAR(64) NOT NULL,
 `name` VARCHAR(32),
 `bday` DATE,
-`bio` TEXT,
+`bio` VARCHAR(1000),
 `share` VARCHAR(128),
 `perm` TINYINT UNSIGNED NOT NULL DEFAULT 0,
 `reg_key` VARCHAR(16),
 `last` DATE
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
-
-#SECURITY WARNING: split access data from login info..
 ')){
 	echo '&nbsp;&nbsp;-Table created: User<br />';
-}else{
-	echo $sql->error;
-	echo '<br />';
-}
-
-
-//===============================================
-
-if ($sql->query('
-CREATE DATABASE  `data`
-')){
-	echo '+DATABASE CREATED: Content<br />';
 }else{
 	echo $sql->error;
 	echo '<br />';
@@ -99,7 +85,8 @@ CREATE TABLE  `data`.`video` (
 `vid` BIGINT UNSIGNED NOT NULL ,
 `part` TINYINT UNSIGNED DEFAULT 1 ,
 `title` VARCHAR(128) ,
-`desc` TEXT ,
+`desc` VARCHAR(1000) ,
+`dur` SMALLINT UNSIGNED NOT NULL DEFAULT 0 ,
 `src` VARCHAR(16) NOT NULL ,
 `url` VARCHAR(255) NOT NULL ,
 `date` TIMESTAMP NOT NULL
@@ -202,7 +189,7 @@ CREATE TABLE  `danmaku`.`cmt#` (
 `size` TINYINT UNSIGNED NOT NULL , #OR maybe char(3)
 `color` MEDIUMINT UNSIGNED NOT NULL ,
 `date` TIMESTAMP NOT NULL ,
-`message` VARCHAR(2000) NOT NULL ,
+`message` VARCHAR(1000) NOT NULL ,
 `lock` BOOLEAN NOT NULL DEFAULT 0 ,
 `uid` INT UNSIGNED DEFAULT 0
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;

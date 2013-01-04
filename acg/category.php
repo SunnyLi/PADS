@@ -10,16 +10,17 @@ $cats = array(
 );
 //print_r($cats);
 
-function cat($cat){
-    // global $cats;    // need this in other files..
-	foreach ($cats as $cats => $subcat)
+function get_cat($cat){
+    global $cats;
+    // need to change the 'as' assignment variable when func need to be reused
+	foreach ($cats as $cats2 => $subcat)
 		foreach ($subcat as $subcat)
-			if ($cat == $subcat)
-				return $cats.'+'.$subcat;
+			if (strtolower($cat) == strtolower($subcat))
+				return $subcat;
 	return false;
 }
 // shows that category is valid
-//echo cat('a')?'true':'false' ;
+// echo cat('mad')?'true':'false' ;
 
 
 $sql = db_connect('data', 'main');
@@ -28,8 +29,20 @@ date_default_timezone_set('America/Toronto');
 
 if (isset($_GET['cat'])){
 	$cat = htmlspecialchars($_GET['cat']);
-	if (cat($cat)){
-		echo 'item exists';
+	if ($cat = get_cat($cat)){
+        $result = $sql->query("SELECT * FROM `handler` WHERE `cat` = '$cat' ORDER BY `date` DESC LIMIT 10");
+
+        echo "<div class='category'><h4>$cat</h4><hr />";
+        while($content = $result->fetch_row()){
+            echo '<div class="content" style="background-color: 
+                rgb('.rand(100,256).','.rand(180,256).','.rand(180,256).');">';
+                echo !empty($content[10])? '<img class="thumb" src="'.$content[10].'"></img>'
+                : '<div class="thumb">No image<br />available!</div>';
+                echo '<a href="acg/?acg='.$content[0].'" class="ctitle">'.$content[2].'</a><br />
+                <span class="info">'. date($content[9]) .'@'.$content[5].'</span><br />
+                <span class="desc">'.$content[3].'</span></div>';
+        }
+        echo '<br /><div style="clear: both;"></div></div>';
 	}else{
 		echo 'not found..';
 	}
