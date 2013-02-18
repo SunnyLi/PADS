@@ -98,7 +98,7 @@ while($content = $result->fetch_row()){
 		echo !empty($content[10])? '<img class="thumb" src="'.$content[10].'"></img>'
 		: '<div class="thumb">No image<br />available!</div>';
 		echo '<a href="/v/sv'.$content[0].'" class="ctitle">'.$content[2].'</a>
-		<div class="option"><a href="mod.php?id='.$content[0].'">modify</a><br />
+		<div class="option"><a href="mod.php?id='.$content[0].'">modify</a><br /><a href="/dm/manage.php?c='.$content[0].'">dm manager</a><br />
         <a href="#" onClick="if(confirm(\'You are about to delete this item, you sure?\')){window.location=\'?rm='.$content[0].'\';}">delete this</a><br />
         <a href="?rmdm='.$content[0].'">clear pool</a></div><br />
 		<span class="info">'. date($content[9]) .'@'.$content[5].'</span><br />

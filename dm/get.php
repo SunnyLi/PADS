@@ -23,7 +23,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 //echo "<information>\n";
 echo "<i>";
 
-if ($result->num_rows > 0)  // fix error from invalid table
+if ($result->num_rows > 0)
     while($row = $result->fetch_row()){
         //var_dump($row);
 

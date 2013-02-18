@@ -18,11 +18,11 @@ if (isset($_POST['user']) && isset($_POST['mail']) && isset($_POST['pass']) && i
 			
 			if($result = $sql->query("SELECT uid FROM `user` WHERE user='$user' LIMIT 1")){		// case insensitive compare
 				if(!$result->fetch_row()){
-					if($sql->query("INSERT INTO `user` (`user`, `pass`, `mail`, `name`) VALUES ('$user', MD5('$pass'), '$mail', `$user`)")){
+					if($sql->query("INSERT INTO `user` (`user`, `pass`, `mail`, `name`) VALUES ('$user', MD5('$pass'), '$mail', '$user')")){
 						echo 'registered! proceeding to sign in.';
 						header('refresh:2;/user/login.php');
 					}else{
-						echo 'Something went wrong! :(d';
+						echo 'Something went wrong! :(d'.$sql->error;
 					}
 				}else{
 					echo 'Username already in use! Please try another username.';
