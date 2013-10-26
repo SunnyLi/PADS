@@ -15,12 +15,10 @@ date_default_timezone_set('America/Toronto');
 //Get file
 $query = 'SELECT * FROM `'.$cid.'`';
 $result = $sql->query($query);
-//var_dump($result);
 
 header('Content-Type:text/xml; charset=utf-8');
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-//echo "<information>\n";
 echo "<i>";
 
 if ($result->num_rows > 0)
@@ -38,9 +36,5 @@ if ($result->num_rows > 0)
         echo '<d p=\'' . $property . '\'>' . $message . '</d>' . "\n";
     }
 
-//echo "</information>";
 echo "</i>";
-
-//free memory... automatically done by end of script
-//mysql_free_result($result);
 ?>

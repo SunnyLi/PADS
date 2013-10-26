@@ -27,7 +27,7 @@ function db_connect($mysql_db, $profile){
 	$sql = mysqli_connect('localhost', $user, $pass, $mysql_db);
 
 	if (!$sql)
-		 die('Connect Error!');
+		 die('Cannot connect to the database!<br>If this is your first time running, please run the db initializer function by setting `$init_db = true;` in index.php located in root directory');
 
 	return $sql;
 }

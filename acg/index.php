@@ -10,7 +10,7 @@ if (is_numeric($acg)){
 	isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
 	require_once('../sqldb/connect.php');
-	$sql = db_connect('data', 'main');	//change user 4 security!!
+	$sql = db_connect('data', 'main');
 	$sql->set_charset("utf8");
 	$query = $sql->query("SELECT * FROM `handler` WHERE `id`='$id'");
 	//var_dump($query);
@@ -48,10 +48,6 @@ if (is_numeric($acg)){
 		}
 		
 		while ($data = $query->fetch_row()){
-		/*uses an array to catch parts
-		$current variable allows perfect tracking of parts
-		so part after a nulled part can still work
-		although I already bypassed this issue.*/
 			//print_r($data);
 			$current = $data[2];
 			$titles[$current] = $data[3];
@@ -80,7 +76,6 @@ if (is_numeric($acg)){
 			
 			$html_title = $handle[2];
 			$title = $html_title;
-			//Theratically html_title will clone $titles[$part] in db value if hitori so this is logical?
 			$html_desc = shorten($handle[3], 100);
 			//$uploader_id = $handle[1];
 			$category = $handle[5]; //add category() function
@@ -102,12 +97,11 @@ include_once('../inc/header.php');
 
 // functions copied from category.php
 $cats = array(
-    'Douga' => array('AMV', 'MAD', 'MMD'),
-    'Music' => array('Vocaloid', 'OP/ED', 'BGM'),
-    'Games' => array('Touhou', 'Doujin', 'Console'),
-    'Other' => array()
+  'Douga' => array('AMV', 'MAD', 'MMD'),
+  'Music' => array('Vocaloid', 'OP/ED', 'BGM'),
+  'Games' => array('Touhou', 'Doujin', 'Console'),
+  'Other' => array()
 );
-//print_r($cats);
 
 function cat($cat){
     global $cats;
@@ -120,8 +114,6 @@ function cat($cat){
     }
     return false;
 }
-// shows that category is valid
-//echo cat('a')?'true':'false' ;
 
 if(!isset($error)){
 

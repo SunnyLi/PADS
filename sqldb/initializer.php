@@ -3,11 +3,6 @@
 ACG Initializer
 ========================
 Set-up database for the site to function.
-
-Note: Only one SQL Statement is allowed at a time.
-        for creating tables
-
-#SUNNY'S DATABASE AUTO-GENERATE SCRIPT
 #Last updated on Jan 3, 2013
 */
 
@@ -115,6 +110,7 @@ CREATE TABLE  `data`.`text` (
 	echo '<br />';
 }
 
+/*
 if ($sql->query('
 #CODE
 CREATE TABLE `data`.`code` (
@@ -133,7 +129,6 @@ CREATE TABLE `data`.`code` (
 	echo '<br />';
 }
 
-/*
 if ($sql->query('
 #SCRIPT PAGE
 CREATE TABLE `data`.`page` (
@@ -147,9 +142,7 @@ CREATE TABLE `data`.`page` (
 	echo $sql->error;
 	echo '<br />';
 }
-*/
 
-/* // This makes no sense! need a seperate db!
 if ($sql->query('
 #COMMENTS
 CREATE TABLE  `data`.`comments` (
@@ -159,8 +152,6 @@ CREATE TABLE  `data`.`comments` (
 `time` TIMESTAMP NOT NULL ,
 `comment` VARCHAR(255) NOT NULL
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
-
-#cid = id of source
 ')){
 	echo '&nbsp;&nbsp;-Table created: CMT<br />';
 }else{

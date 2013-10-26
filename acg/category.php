@@ -8,23 +8,20 @@ $cats = array(
 'Games' => array('Touhou', 'Doujin', 'Console'),
 'Other' => array()
 );
-//print_r($cats);
 
+// check if parameter is a valid category
 function get_cat($cat){
     global $cats;
-    // need to change the 'as' assignment variable when func need to be reused
 	foreach ($cats as $cats2 => $subcat)
 		foreach ($subcat as $subcat)
 			if (strtolower($cat) == strtolower($subcat))
 				return $subcat;
 	return false;
 }
-// shows that category is valid
-// echo cat('mad')?'true':'false' ;
 
 
 $sql = db_connect('data', 'main');
-$sql->set_charset("utf8");	// for displaying asian characters
+$sql->set_charset("utf8");
 date_default_timezone_set('America/Toronto');
 
 if (isset($_GET['cat'])){

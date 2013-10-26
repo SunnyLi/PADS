@@ -9,7 +9,6 @@
 CREATE DATABASE  `data` ;
 
 #USER
-#SECURITY WARNING: split access data from login info..
 CREATE TABLE `data`.`user` (
 `uid` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `user` VARCHAR(32) NOT NULL,
@@ -116,15 +115,3 @@ CREATE TABLE  `danmaku`.`cmt#` (
 #DROP DATABASE IF EXISTS `data`;
 #DROP DATABASE IF EXISTS `danmaku`;
 
-
-#==================== COMMANDS ====================
-
-#insert data general data
-#mysql_query("INSERT INTO `Handler` (`uid`, `title`, `media`, `category`, `tags`) VALUES ('123','test','vid','rand',null)");
-
-#get max available id
-/*
-$exe = mysql_query("SELECT MAX(id) FROM `handler` LIMIT 1");
-$high = mysql_fetch_array($exe);
-echo $high[0];
-*/

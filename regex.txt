@@ -1,9 +1,0 @@
-nginx regular expression
-rewrite "^/v/sv([0-9]{0,5})((/index(|_(\d{1,2}))\.html)|/)?$" /acg/?id=$1&part=$5 last;
-
-niconico - everything after sm number is allowed but ignored..
-bilibili - av######/{blah}index_2.html will work
-acfun is okay
-tucao use js for parts
-moemoe don't support it
-danmaku uses php query string
