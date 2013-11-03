@@ -1,10 +1,16 @@
 <?php
-/*======================
-ACG Initializer
-========================
-Set-up database for the site to function.
-#Last updated on Jan 3, 2013
-*/
+
+/**
+ * ACG Initializer
+ *
+ * Set-up database for the site to function.
+ *
+ * @package    PADS
+ * @author     Sunnyok
+ * @copyright  2013
+ * @license    MIT
+ * @version    Nov 3, 2013
+ */
 
 //Connection Script
 require_once('connect.php');
@@ -111,38 +117,6 @@ CREATE TABLE  `data`.`text` (
 }
 
 /*
-if ($sql->query('
-#CODE
-CREATE TABLE `data`.`code` (
-`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`code` BIGINT UNSIGNED NOT NULL ,
-`part` TINYINT UNSIGNED DEFAULT 1 ,
-`title` VARCHAR(128) ,
-`desc` VARCHAR(255) ,
-`src` TEXT NOT NULL ,
-`date` TIMESTAMP NOT NULL
-) ENGINE = MYISAM DEFAULT CHARSET=utf8;
-')){
-	echo '&nbsp;&nbsp;-Table created CODE<br />';
-}else{
-	echo $sql->error;
-	echo '<br />';
-}
-
-if ($sql->query('
-#SCRIPT PAGE
-CREATE TABLE `data`.`page` (
-`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`page` BIGINT UNSIGNED NOT NULL ,
-`file` VARCHAR(64) NOT NULL
-) ENGINE = MYISAM DEFAULT CHARSET=utf8;
-')){
-	echo '&nbsp;&nbsp;-Table created: PG<br />';
-}else{
-	echo $sql->error;
-	echo '<br />';
-}
-
 if ($sql->query('
 #COMMENTS
 CREATE TABLE  `data`.`comments` (

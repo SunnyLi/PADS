@@ -1,6 +1,18 @@
-﻿<?php
-//TODO: add parts, add lock,
-// check if user want uid association
+<?php
+
+/**
+ * Danmaku Converter / Loader
+ *
+ * Converts several different danmaku/subs formats to mode 7
+ *  and then adds it to the database.
+ *  currently works with AC, Bili, Nico, srt
+ *
+ * @package    PADS
+ * @author     Sunnyok
+ * @copyright  2013
+ * @license    MIT
+ */
+
 require_once('../inc/header.php');
 
 if (!isset($_SESSION['uid'])){
@@ -455,29 +467,8 @@ if (isset($_POST['vid']) && isset($_POST['send'])){
                         
                 }else if($extension == 'srt' && $type == 'application/octet-stream'){
 
-					if ($size <= 200000){ //size check
-					/*	SubRip Parser
-						Example result:
-						Array
-						(
-							[0] => stdClass Object
-								(
-									[number] => 1
-									[stopTime] => 00:00:24,400
-									[startTime] => 00:00:20,000
-									[text] => Altocumulus clouds occur between six thousand
-								)
-
-							[1] => stdClass Object
-								(
-									[number] => 2
-									[stopTime] => 00:00:27,800
-									[startTime] => 00:00:24,600
-									[text] => and twenty thousand feet above ground level.
-								)
-
-						)
-					*/
+					if ($size <= 200000){
+					//	SubRip Parser
 						try{
 							define('SRT_STATE_SUBNUMBER', 0);
 							define('SRT_STATE_TIME',      1);

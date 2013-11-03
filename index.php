@@ -1,9 +1,15 @@
 <?php
-/*=============================
-Default Homepage
-===============================
-Basically connects to the database and produce the default layout
-*/
+
+/**
+ * Default Homepage
+ *
+ * Basically connects to the database and produce the default layout
+ *
+ * @package    PADS
+ * @author     Sunnyok
+ * @copyright  2013
+ * @license    MIT
+ */
 
 require_once('sqldb/connect.php');
 require_once('inc/header.php');
@@ -14,21 +20,15 @@ $init_db = false;
 if ($init_db)
 	require_once('sqldb/initializer.php');
 
-//Session_start included in header
-//Random setters for testing purposes
-//$_SESSION['uid'] = 1;
-//$_SESSION['name'] = "Sunny";
-//session_unset('name');
-//session_unset('uid');
-
 //Connects to database 'data' with 'main' user
 $sql = db_connect('data', 'main');
 $sql->set_charset("utf8");	// for displaying asian characters
 $result = $sql->query("SELECT * FROM `handler` ORDER BY `date` DESC LIMIT 10");
 
+// this appears at multiple places!
 date_default_timezone_set('America/Toronto');
 
-echo '<br /><h2>Recent Links</h2><br />';
+echo '<br /><h2>Recently Added</h2><br />';
 
 while($content = $result->fetch_row()){
 	echo '<div class="content" style="background-color: 

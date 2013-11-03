@@ -20,15 +20,6 @@ $data_array = explode('.', $cid);
 $cid = (int)$data_array[0];
 isset($data_array[1]) ? $part=(int)$data_array[1] : $part=1;
 
-/*
-$cid = (int)$_POST['cid'];
-$message = escape($_POST['message']);
-$stime = (int)$_POST['stime'];
-$mode = (int)$_POST['mode'];
-$size = (int)$_POST['size'];
-$color = (int)$_POST['color'];
-*/
-
 $sql = db_connect('danmaku', 'main');
 $sql->set_charset('utf8');
 date_default_timezone_set('America/Toronto');

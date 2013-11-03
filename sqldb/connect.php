@@ -1,10 +1,9 @@
 <?php
+
 /*=============================
 Mysql login function
 ===============================
 Connects to a database with the user specified.
-
-Note:	MySQL disconnects at end of script.
 */
 
 //Connect to database with specifed user

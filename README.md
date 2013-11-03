@@ -1,5 +1,6 @@
 Project Another Danmaku Site
-=====***
+=====
+***
 
 **PADS** is an acronym for **Project Another Danmaku Site**.
 
@@ -18,22 +19,26 @@ Dependency: PHP, MySQL
 3. run it and see what happens.. (assuming if you set up the dependency)
 
 
-Caution
+A Word of Caution
 -----
-Contains ancient code that may cause major headache to viewers, be prepared for the worse..
+This project contains code which may cause headache to viewers due to novice programming.
+
+It is **not** production ready; use at your own risk!
 
 
 Contributing
 -----
-Any contributions are welcomed.
+All contributions are welcomed.
 
 
 License
--------
-PADS is released under the [MIT License](./blob/master/LICENSE).
+-----
+PADS is released under the MIT License.
 
-<br>
+
 
 又一个弹幕视频网站
-=====***
-Another 坑
+=====
+***
+
+全英文...

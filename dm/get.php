@@ -12,7 +12,6 @@ $sql = db_connect('danmaku', 'main');
 $sql -> set_charset('utf8');
 date_default_timezone_set('America/Toronto');
 
-//Get file
 $query = 'SELECT * FROM `'.$cid.'`';
 $result = $sql->query($query);
 
@@ -23,13 +22,6 @@ echo "<i>";
 
 if ($result->num_rows > 0)
     while($row = $result->fetch_row()){
-        //var_dump($row);
-
-        //Fix this horrible array thing
-        /*echo "<data><playTime>$row[1]</playTime>
-        <message fontsize='$row[3]' color='$row[4]' mode='$row[2]'>$row[6]</message>
-        <times>$row[5]</times></data>\n";	//date('Y-m-d H:i', $row[5])*/
-
         $var = array($row[1],$row[2],$row[3],$row[4],strtotime($row[5]),$row[7]);
         $property = join(',',$var);
         $message = htmlspecialchars($row[6]);

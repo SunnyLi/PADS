@@ -70,8 +70,7 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 <label>Type:</label>
 	<select name='type'>
 		<option>Video</option>
-		<option>Article</option>
-		<option>Code</option>
+		<!--<option>Article</option>-->
 	</select>
 	<br />
 <label>Source:</label>	
@@ -80,7 +79,6 @@ if (isset ($_GET['title']) && isset ($_GET['desc']) && isset ($_GET['type'])
 		<option value='sina'>Sina</option>
 		<option value='qq'>QQ</option>
 		<option value='url'>Local</option>
-		<option>Dailymotion</option>
 	</select>
 	<input type='text' name='url' placeholder='video id'><br />
 <label>Title:</label>	<input type='text' name='title'><br />
