@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <conf>
-  <performance> <!--USELESS?!?-->
+  <performance>
     <!-- 最长弹幕/像素 -->
     <maxwidth>1</maxwidth>
     <!-- 最高弹幕/像素 -->

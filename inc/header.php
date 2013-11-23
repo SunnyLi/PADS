@@ -41,7 +41,7 @@ if (isset($_SESSION['uid'])&&isset($_SESSION['name'])){
 <span id="link"><a href="/acg/manage.php">manage</a></span><?php endif;?>
 </div>
 
-<div id="cwrap" onclick="cls('search-box')">
+<div id="cwrap">
 
 <div id="head">
 <a href="/"><div id="logo" class="full"></div></a>

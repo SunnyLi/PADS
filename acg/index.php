@@ -153,8 +153,7 @@ if(!isset($error)){
 		break;
 	}
 
-	?>
-	Share: unavailable in alpha<br /><br />
+	?><br /><br />
 	<?php
 	if ($type=='vid'||$type=='code'){
 		echo 'Description:<br />';

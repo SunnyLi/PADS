@@ -1,6 +1,5 @@
 Project Another Danmaku Site
 =====
-***
 
 **PADS** is an acronym for **Project Another Danmaku Site**.
 
@@ -39,6 +38,5 @@ PADS is released under the MIT License.
 
 又一个弹幕视频网站
 =====
-***
 
-全英文...
+以上。

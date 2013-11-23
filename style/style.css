@@ -58,11 +58,11 @@ height: 200px;
 
 #head #logo{
 background-image: url(logo.png);
-background-size: 1000px 170px;
+background-size: 1000px 180px;
 }
 
 #head .full{
-height: 170px;
+height: 180px;
 width: 100%;
 }
 
